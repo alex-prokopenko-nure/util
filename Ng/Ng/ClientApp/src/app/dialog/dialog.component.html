@@ -1,0 +1,27 @@
+  <h1 mat-dialog-title *ngIf="tour.id!=undefined;else add">Change tour</h1>
+  <ng-template #add><h1 mat-dialog-title>Add tour</h1></ng-template>
+  <mat-dialog-content>
+    <mat-form-field>
+      <input matInput [(ngModel)]="tour.name" placeholder="Enter name">
+    </mat-form-field><br />
+    <mat-form-field>
+      <input type="date" matInput [(ngModel)]="tour.dateFormatted" min="{{today}}" placeholder="Choose date">
+    </mat-form-field><br />
+    <mat-form-field>
+      <input type="text" matInput value="{{getExcursion(tour)}}" placeholder="Choose excursion" [formControl]="excursionCtrl" [matAutocomplete]="auto">
+    </mat-form-field><br />
+    <mat-form-field>
+      <input type="text" matInput value="{{getClient(tour)}}" placeholder="Choose client" [formControl]="clientCtrl" [matAutocomplete]="avto">
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button (click)="createTour()"><span *ngIf="tour.id==undefined">Add</span><span *ngIf="tour.id!=undefined">Update</span></button>
+    <button mat-button type="button" mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let excursion of filteredExcursions" [value]="option" (click)="chooseExcursion(excursion)">{{excursion.name}}</mat-option>
+  </mat-autocomplete>
+
+  <mat-autocomplete #avto="matAutocomplete">
+    <mat-option *ngFor="let client of filteredClients" [value]="option" (click)="chooseClient(client)">{{client.name}}</mat-option>
+  </mat-autocomplete>

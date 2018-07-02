@@ -1,0 +1,28 @@
+<h1>Tours</h1>
+
+<p *ngIf="!tours || !clients || !excursions"><em>Loading...</em></p>
+
+<table class='table' *ngIf="tours">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Date</th>
+      <th>Excursion</th>
+      <th>Client</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let t of tours" (click)="openDialog(t)">
+      <td>{{ t.name }}</td>
+      <td>{{ t.dateFormatted }}</td>
+      <td>{{ getExcursion(t) }} </td>
+      <td>{{ getClient(t) }}</td>
+      <td>
+        <button class="btn btn-danger" (click)="deleteTour(t.id); $event.stopPropagation();"><span class="glyphicon glyphicon-remove" (click)="deleteTour(t.id)"></span></button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<button class="btn btn-info" (click)="openDialog()">Add Tour</button>
