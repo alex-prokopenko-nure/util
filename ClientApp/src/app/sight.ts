@@ -1,7 +1,7 @@
 import { ExcursionSight } from "./excursionsight";
 
 export class Sight {
-  id: number;
+  id: string;
   name: string;
   excursionSights: ExcursionSight[];
 }

@@ -8,9 +8,9 @@ namespace TourApi.Repos
 {
     public interface IExcursionRepository
     {
-        Task<Excursion> Get(int id);
+        Task<Excursion> Get(Guid id);
         Task<List<Excursion>> GetAll();
         Task<Excursion> Create(Excursion excursion);
-        void Delete(int id);
+        void Delete(Guid id);
     }
 }

@@ -1,7 +1,7 @@
 import { Tour } from "./tour";
 
 export class Client {
-  id: number;
+  id: string;
   name: string;
   tours: Tour[];
 }

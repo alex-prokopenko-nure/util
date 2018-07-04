@@ -25,21 +25,27 @@ namespace TourApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSights(int id)
+        public async Task<IActionResult> GetSights(Guid id)
         {
             return Ok(await _excursionSightRepository.GetExcursionSights(id));
         }
 
-        [HttpPost("{excursionId}")]
-        public async Task<IActionResult> AddExcursionSight(int excursionId, [FromBody] int sightId)
+        [HttpPost]
+        public async Task<IActionResult> AddExcursionSight([FromBody] Pair ids)
         {
-            return Ok(await _excursionSightRepository.Create(excursionId, sightId));
+            return Ok(await _excursionSightRepository.Create(ids.ExcursionId, ids.SightId));
         }
 
         [HttpDelete("{excursionId}/{sightId}")]
-        public async Task<IActionResult> DeleteExcursionSight(int excursionId, int sightId)
+        public async Task<IActionResult> DeleteExcursionSight(Guid excursionId, Guid sightId)
         {
             return Ok(await _excursionSightRepository.Delete(excursionId, sightId));
+        }
+
+        public class Pair
+        {
+            public Guid ExcursionId { get; set; }
+            public Guid SightId { get; set; }
         }
     }
 }

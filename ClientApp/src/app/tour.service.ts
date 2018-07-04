@@ -18,7 +18,7 @@ export class TourService {
     return this.http.get<Tour[]>(this.url + 'tour');
   }
 
-  getTour(id: number): Observable<Tour> {
+  getTour(id: string): Observable<Tour> {
     return this.http.get<Tour>(this.url + 'tour/' + id);
   }
 
@@ -30,7 +30,7 @@ export class TourService {
     return this.http.put<Tour>(this.url + 'tour/' + tour.id, tour);
   }
 
-  deleteTour(id: number): Observable<number> {
-    return this.http.delete<number>(this.url + 'tour/' + id);
+  deleteTour(id: string): Observable<string> {
+    return this.http.delete<string>(this.url + 'tour/' + id);
   }
 }

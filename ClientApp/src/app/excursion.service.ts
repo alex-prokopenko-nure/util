@@ -18,7 +18,7 @@ export class ExcursionService {
     return this.http.get<Excursion[]>(this.url + 'excursion');
   }
 
-  getExcursion(id: number): Observable<Excursion> {
+  getExcursion(id: string): Observable<Excursion> {
     return this.http.get<Excursion>(this.url + 'excursion/' + id);
   }
 
@@ -30,7 +30,7 @@ export class ExcursionService {
     return this.http.put<Excursion>(this.url + 'excursion/' + excursion.id, excursion);
   }
 
-  deleteExcursion(id: number): Observable<number> {
-    return this.http.delete<number>(this.url + 'excursion/' + id);
+  deleteExcursion(id: string): Observable<string> {
+    return this.http.delete<string>(this.url + 'excursion/' + id);
   }
 }

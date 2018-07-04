@@ -14,11 +14,19 @@ export class ExcursionSightService {
     this.url = environment.apiUrl;
   }
 
-  insertSight(excursionId: number, sightId: number): Observable<any> {
-    return this.http.post<any>(this.url + 'excursionsight/' + excursionId, sightId);
+  insertSight(excursionId: string, sightId: string): Observable<any> {
+	let ids: Pair = new Pair();
+	ids.excursionId = excursionId;
+	ids.sightId = sightId;
+    return this.http.post<any>(this.url + 'excursionsight', ids);
   }
 
-  deleteSight(excursionId: number, sightId: number): Observable<any> {
+  deleteSight(excursionId: string, sightId: string): Observable<any> {
     return this.http.delete<any>(this.url + 'excursionsight/' + excursionId + '/' + sightId);
   }
+}
+
+export class Pair {
+	excursionId: string;
+	sightId: string;
 }

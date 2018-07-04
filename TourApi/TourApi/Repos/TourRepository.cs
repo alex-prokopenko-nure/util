@@ -23,14 +23,14 @@ namespace TourApi.Repos
             return tour;
         }
 
-        public async Task<int> Delete(int id)
+        public async Task<Guid> Delete(Guid id)
         {
             _dbContext.Tours.Remove(await _dbContext.Tours.FirstOrDefaultAsync(x => x.Id == id));
             await _dbContext.SaveChangesAsync();
             return id;
         }
 
-        public async Task<Tour> Get(int id)
+        public async Task<Tour> Get(Guid id)
         {
             return await _dbContext.Tours.FirstOrDefaultAsync(x => x.Id == id);
         }

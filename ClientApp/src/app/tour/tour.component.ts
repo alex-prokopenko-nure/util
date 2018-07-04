@@ -62,7 +62,7 @@ export class TourComponent implements OnInit {
     })
   }
 
-  deleteTour(id: number) {
+  deleteTour(id: string) {
     this.tourService.deleteTour(id).subscribe(result => {
       let found = false;
       for (let i = 0; i < this.tours.length; ++i) {

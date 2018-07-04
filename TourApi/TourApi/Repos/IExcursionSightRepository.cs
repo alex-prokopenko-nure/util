@@ -9,8 +9,8 @@ namespace TourApi.Repos
     public interface IExcursionSightRepository
     {
         Task<List<ExcursionSight>> GetAll();
-        Task<List<int>> GetExcursionSights(int excursionId);
-        Task<ExcursionSight> Create(int excursionId, int sightId);
-        Task<Tuple<int, int>> Delete(int excursionId, int sightId);
+        Task<List<Guid>> GetExcursionSights(Guid excursionId);
+        Task<ExcursionSight> Create(Guid excursionId, Guid sightId);
+        Task<Tuple<Guid, Guid>> Delete(Guid excursionId, Guid sightId);
     }
 }

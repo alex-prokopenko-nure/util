@@ -10,8 +10,8 @@ using TourApi.Models;
 namespace TourApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180702114202_Hello")]
-    partial class Hello
+    [Migration("20180704140622_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,11 +21,50 @@ namespace TourApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("TourApi.Models.AppUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<string>("Email");
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("NormalizedEmail");
+
+                    b.Property<string>("NormalizedUserName");
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("TourApi.Models.Client", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name");
 
@@ -36,9 +75,8 @@ namespace TourApi.Migrations
 
             modelBuilder.Entity("TourApi.Models.Excursion", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name");
 
@@ -49,9 +87,9 @@ namespace TourApi.Migrations
 
             modelBuilder.Entity("TourApi.Models.ExcursionSight", b =>
                 {
-                    b.Property<int>("ExcursionId");
+                    b.Property<Guid>("ExcursionId");
 
-                    b.Property<int>("SightId");
+                    b.Property<Guid>("SightId");
 
                     b.HasKey("ExcursionId", "SightId");
 
@@ -62,9 +100,8 @@ namespace TourApi.Migrations
 
             modelBuilder.Entity("TourApi.Models.Sight", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name");
 
@@ -75,15 +112,14 @@ namespace TourApi.Migrations
 
             modelBuilder.Entity("TourApi.Models.Tour", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("ClientId");
+                    b.Property<Guid>("ClientId");
 
                     b.Property<DateTimeOffset>("Date");
 
-                    b.Property<int>("ExcursionId");
+                    b.Property<Guid>("ExcursionId");
 
                     b.HasKey("Id");
 

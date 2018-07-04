@@ -61,9 +61,8 @@ namespace TourApi.Migrations
 
             modelBuilder.Entity("TourApi.Models.Client", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name");
 
@@ -74,9 +73,8 @@ namespace TourApi.Migrations
 
             modelBuilder.Entity("TourApi.Models.Excursion", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name");
 
@@ -87,9 +85,9 @@ namespace TourApi.Migrations
 
             modelBuilder.Entity("TourApi.Models.ExcursionSight", b =>
                 {
-                    b.Property<int>("ExcursionId");
+                    b.Property<Guid>("ExcursionId");
 
-                    b.Property<int>("SightId");
+                    b.Property<Guid>("SightId");
 
                     b.HasKey("ExcursionId", "SightId");
 
@@ -100,9 +98,8 @@ namespace TourApi.Migrations
 
             modelBuilder.Entity("TourApi.Models.Sight", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name");
 
@@ -113,15 +110,14 @@ namespace TourApi.Migrations
 
             modelBuilder.Entity("TourApi.Models.Tour", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("ClientId");
+                    b.Property<Guid>("ClientId");
 
                     b.Property<DateTimeOffset>("Date");
 
-                    b.Property<int>("ExcursionId");
+                    b.Property<Guid>("ExcursionId");
 
                     b.HasKey("Id");
 

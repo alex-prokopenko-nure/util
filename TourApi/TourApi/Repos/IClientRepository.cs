@@ -8,9 +8,9 @@ namespace TourApi.Repos
 {
     public interface IClientRepository
     {
-        Task<Client> Get(int id);
+        Task<Client> Get(Guid id);
         Task<List<Client>> GetAll();
         Task<Client> Create(Client client);
-        void Delete(int id);
+        void Delete(Guid id);
     }
 }

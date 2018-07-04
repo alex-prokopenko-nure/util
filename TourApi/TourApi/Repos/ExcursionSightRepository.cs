@@ -16,7 +16,7 @@ namespace TourApi.Repos
             _dbContext = dbContext;
         }
 
-        public async Task<ExcursionSight> Create(int excursionId, int sightId)
+        public async Task<ExcursionSight> Create(Guid excursionId, Guid sightId)
         {
             ExcursionSight exs = new ExcursionSight { ExcursionId = excursionId, SightId = sightId };
             await _dbContext.ExcursionSights.AddAsync(exs);
@@ -24,11 +24,11 @@ namespace TourApi.Repos
             return exs;
         }
 
-        public async Task<Tuple<int, int>> Delete(int excursionId, int sightId)
+        public async Task<Tuple<Guid, Guid>> Delete(Guid excursionId, Guid sightId)
         {
             _dbContext.ExcursionSights.Remove(await _dbContext.ExcursionSights.FirstOrDefaultAsync(x => x.ExcursionId == excursionId && x.SightId == sightId));
             await _dbContext.SaveChangesAsync();
-            return new Tuple<int, int>(excursionId, sightId);
+            return new Tuple<Guid, Guid>(excursionId, sightId);
         }
 
         public async Task<List<ExcursionSight>> GetAll()
@@ -36,7 +36,7 @@ namespace TourApi.Repos
             return await _dbContext.ExcursionSights.ToListAsync();
         }
 
-        public async Task<List<int>> GetExcursionSights(int excursionId)
+        public async Task<List<Guid>> GetExcursionSights(Guid excursionId)
         {
             return await _dbContext.ExcursionSights.Where(x => x.ExcursionId == excursionId).Select(x => x.SightId).ToListAsync();
         }

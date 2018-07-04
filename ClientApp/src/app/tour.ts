@@ -2,8 +2,8 @@ import { Excursion } from "./excursion";
 import { Client } from "./client";
 
 export class Tour {
-  id: number;
+  id: string;
   date: Date;
-  excursionId: number;
-  clientId: number;
+  excursionId: string;
+  clientId: string;
 }

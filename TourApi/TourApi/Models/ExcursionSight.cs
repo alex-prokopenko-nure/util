@@ -7,7 +7,7 @@ namespace TourApi.Models
 {
     public class ExcursionSight
     {
-        public int ExcursionId { get; set; }
-        public int SightId { get; set; }
+        public Guid ExcursionId { get; set; }
+        public Guid SightId { get; set; }
     }
 }

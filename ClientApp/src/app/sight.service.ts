@@ -18,7 +18,7 @@ export class SightService {
     return this.http.get<Sight[]>(this.url + 'sight');
   }
 
-  getSights(id: number): Observable<Sight[]> {
+  getSights(id: string): Observable<Sight[]> {
     return this.http.get<Sight[]>(this.url + 'sight/' + id);
   }
 

@@ -27,7 +27,7 @@ namespace TourApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTour(int id)
+        public async Task<IActionResult> GetTour(Guid id)
         {
             return Ok(await _tourRepository.Get(id));
         }
@@ -39,13 +39,13 @@ namespace TourApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> ChangeTour(int id, [FromBody]Tour tour)
+        public async Task<IActionResult> ChangeTour(Guid id, [FromBody]Tour tour)
         {
             return Ok(await _tourRepository.Update(tour));
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTour(int id)
+        public async Task<IActionResult> DeleteTour(Guid id)
         {
             return Ok(await _tourRepository.Delete(id));
         }

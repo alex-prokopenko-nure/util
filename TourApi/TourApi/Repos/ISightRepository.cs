@@ -9,8 +9,8 @@ namespace TourApi.Repos
     public interface ISightRepository
     {
         Task<List<Sight>> GetAllSights();
-        Task<List<Sight>> GetSights(int id);
+        Task<List<Sight>> GetSights(Guid id);
         Task<Sight> Create(Sight sight);
-        Task<int> Delete(int id);
+        Task<Guid> Delete(Guid id);
     }
 }

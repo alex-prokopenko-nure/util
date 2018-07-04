@@ -23,7 +23,7 @@ namespace TourApi.Repos
             return sight;
         }
 
-        public async Task<int> Delete(int id)
+        public async Task<Guid> Delete(Guid id)
         {
             _dbContext.Sights.Remove(await _dbContext.Sights.FirstOrDefaultAsync(x => x.Id == id));
             await _dbContext.SaveChangesAsync();
@@ -35,9 +35,9 @@ namespace TourApi.Repos
            return await _dbContext.Sights.ToListAsync();
         }
 
-        public async Task<List<Sight>> GetSights(int id)
+        public async Task<List<Sight>> GetSights(Guid id)
         {
-            List<int> ids = await _dbContext.ExcursionSights.Where(x => x.ExcursionId == id).Select(x => x.SightId).ToListAsync();
+            List<Guid> ids = await _dbContext.ExcursionSights.Where(x => x.ExcursionId == id).Select(x => x.SightId).ToListAsync();
             return await _dbContext.Sights.Where(x => ids.Contains(x.Id)).ToListAsync();
         }
     }

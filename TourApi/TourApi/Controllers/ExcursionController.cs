@@ -26,7 +26,7 @@ namespace TourApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetExcursion(int id)
+        public async Task<IActionResult> GetExcursion(Guid id)
         {
             return Ok(await _excursionRepository.Get(id));
         }
@@ -38,9 +38,9 @@ namespace TourApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public decimal DeleteExcursion(decimal id)
+        public Guid DeleteExcursion(Guid id)
         {
-            _excursionRepository.Delete(Convert.ToInt32(id));
+            _excursionRepository.Delete(id);
             return id;
         }
     }

@@ -26,7 +26,7 @@ namespace TourApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSights(int id)
+        public async Task<IActionResult> GetSights(Guid id)
         {
             return Ok(await _sightRepository.GetSights(id));
         }
@@ -38,7 +38,7 @@ namespace TourApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             return Ok(await _sightRepository.Delete(id));
         }

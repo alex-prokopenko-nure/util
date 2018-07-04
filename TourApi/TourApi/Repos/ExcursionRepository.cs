@@ -23,13 +23,13 @@ namespace TourApi.Repos
             return excursion;
         }
 
-        public async void Delete(int id)
+        public async void Delete(Guid id)
         {
             _dbContext.Excursions.Remove(await _dbContext.Excursions.FirstOrDefaultAsync(x => x.Id == id));
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Excursion> Get(int id)
+        public async Task<Excursion> Get(Guid id)
         {
             return await _dbContext.Excursions.FirstOrDefaultAsync(x => x.Id == id);
         }

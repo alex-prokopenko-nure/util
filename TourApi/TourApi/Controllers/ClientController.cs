@@ -26,7 +26,7 @@ namespace TourApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetClient(int id)
+        public async Task<IActionResult> GetClient(Guid id)
         {
             return Ok(await _clientRepository.Get(id));
         }
