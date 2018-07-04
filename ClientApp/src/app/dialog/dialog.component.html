@@ -1,0 +1,51 @@
+<h1 mat-dialog-title *ngIf="tour.id!=undefined;else add">Change tour</h1>
+<ng-template #add><h1 mat-dialog-title>Add tour</h1></ng-template>
+<mat-dialog-content>
+  <mat-form-field>
+    <input type="date" matInput [(ngModel)]="tour.date" min="{{today}}" placeholder="Choose date">
+  </mat-form-field><br />
+  <mat-form-field>
+    <input type="text" matInput value="{{getExcursion(tour)}}" placeholder="Choose excursion" [formControl]="excursionCtrl" [matAutocomplete]="auto">
+  </mat-form-field><br />
+  <mat-form-field>
+    <input type="text" matInput value="{{getClient(tour)}}" placeholder="Choose client" [formControl]="clientCtrl" [matAutocomplete]="avto">
+  </mat-form-field>
+</mat-dialog-content>
+<div *ngIf="tour.excursionId">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Tour sights:</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="rows" *ngFor="let sight of tourSights">
+        <td>{{ sight.name }}</td>
+        <td></td>
+        <td><span (click)="deleteSight(sight)" class="glyphicon glyphicon-remove"></span></td>
+      </tr>
+    </tbody>
+  </table>
+  <mat-form-field>
+    <input type="text" matInput placeholder="Add sight" [formControl]="sightCtrl" [matAutocomplete]="avito">
+  </mat-form-field><br />
+  <button mat-button (click)="addSight()">Add new sight</button>
+</div>
+<mat-dialog-actions>
+  <button mat-button (click)="createTour()"><span *ngIf="tour.id==undefined">Add</span><span *ngIf="tour.id!=undefined">Update</span></button>
+  <button mat-button type="button" mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
+
+<mat-autocomplete #auto="matAutocomplete">
+  <mat-option *ngFor="let excursion of filteredExcursions" [value]="option" (click)="chooseExcursion(excursion)">{{excursion.name}}</mat-option>
+</mat-autocomplete>
+
+<mat-autocomplete #avto="matAutocomplete">
+  <mat-option *ngFor="let client of filteredClients" [value]="option" (click)="chooseClient(client)">{{client.name}}</mat-option>
+</mat-autocomplete>
+
+<mat-autocomplete #avito="matAutocomplete">
+  <mat-option *ngFor="let fsight of filteredSights" [value]="option" (click)="chooseSight(fsight)">{{fsight.name}}</mat-option>
+</mat-autocomplete>

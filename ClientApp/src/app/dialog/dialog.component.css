@@ -1,0 +1,7 @@
+span.glyphicon {
+ color: #ff0000;
+}
+
+  span.glyphicon:hover {
+    color: #ce0404;
+  }
