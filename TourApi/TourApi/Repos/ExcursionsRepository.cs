@@ -7,11 +7,11 @@ using TourApi.Models;
 
 namespace TourApi.Repos
 {
-    public class ExcursionRepository : IExcursionRepository
+    public class ExcursionsRepository : IExcursionsRepository
     {
         private ApplicationDbContext _dbContext;
 
-        public ExcursionRepository(ApplicationDbContext dbContext)
+        public ExcursionsRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }

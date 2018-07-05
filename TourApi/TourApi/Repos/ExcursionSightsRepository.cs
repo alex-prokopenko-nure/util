@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TourApi.Repos
 {
-    public class ExcursionSightRepository : IExcursionSightRepository
+    public class ExcursionSightsRepository : IExcursionSightRepository
     {
         private ApplicationDbContext _dbContext;
 
-        public ExcursionSightRepository(ApplicationDbContext dbContext)
+        public ExcursionSightsRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }

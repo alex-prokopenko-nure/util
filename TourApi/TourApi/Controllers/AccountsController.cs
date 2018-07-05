@@ -12,13 +12,13 @@ using TourApi.Helpers;
 namespace TourApi.Controllers
 {
     [Route("[controller]")]
-    public class AccountController : Controller
+    public class AccountsController : Controller
     {
         private readonly ApplicationDbContext _appDbContext;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
 
-        public AccountController(UserManager<AppUser> userManager, IMapper mapper, ApplicationDbContext appDbContext)
+        public AccountsController(UserManager<AppUser> userManager, IMapper mapper, ApplicationDbContext appDbContext)
         {
             _userManager = userManager;
             _mapper = mapper;

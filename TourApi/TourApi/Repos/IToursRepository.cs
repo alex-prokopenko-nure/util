@@ -6,11 +6,12 @@ using TourApi.Models;
 
 namespace TourApi.Repos
 {
-    public interface ISightRepository
+    public interface IToursRepository
     {
-        Task<List<Sight>> GetAllSights();
-        Task<List<Sight>> GetSights(Guid id);
-        Task<Sight> Create(Sight sight);
+        Task<Tour> Get(Guid id);
+        Task<List<Tour>> GetAll();
+        Task<Tour> Create(Tour tour);
+        Task<Tour> Update(Tour tour);
         Task<Guid> Delete(Guid id);
     }
 }

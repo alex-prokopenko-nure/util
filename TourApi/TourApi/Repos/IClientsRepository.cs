@@ -6,11 +6,11 @@ using TourApi.Models;
 
 namespace TourApi.Repos
 {
-    public interface IExcursionRepository
+    public interface IClientsRepository
     {
-        Task<Excursion> Get(Guid id);
-        Task<List<Excursion>> GetAll();
-        Task<Excursion> Create(Excursion excursion);
+        Task<Client> Get(Guid id);
+        Task<List<Client>> GetAll();
+        Task<Client> Create(Client client);
         void Delete(Guid id);
     }
 }

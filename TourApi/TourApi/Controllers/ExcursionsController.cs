@@ -10,11 +10,11 @@ using TourApi.Repos;
 namespace TourApi.Controllers
 {
     [Route("[controller]")]
-    public class ExcursionController : Controller
+    public class ExcursionsController : Controller
     {
-        private IExcursionRepository _excursionRepository;
+        private IExcursionsRepository _excursionRepository;
 
-        public ExcursionController(IExcursionRepository excursionRepository)
+        public ExcursionsController(IExcursionsRepository excursionRepository)
         {
             _excursionRepository = excursionRepository;
         }

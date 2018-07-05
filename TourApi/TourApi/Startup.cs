@@ -40,11 +40,11 @@ namespace TourApi
             services.AddCors();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddScoped<ITourRepository, TourRepository>();
-            services.AddScoped<IClientRepository, ClientRepository>();
-            services.AddScoped<IExcursionRepository, ExcursionRepository>();
-            services.AddScoped<IExcursionSightRepository, ExcursionSightRepository>();
-            services.AddScoped<ISightRepository, SightRepository>();
+            services.AddScoped<IToursRepository, ToursRepository>();
+            services.AddScoped<IClientsRepository, ClientsRepository>();
+            services.AddScoped<IExcursionsRepository, ExcursionsRepository>();
+            services.AddScoped<IExcursionSightRepository, ExcursionSightsRepository>();
+            services.AddScoped<ISightsRepository, SightsRepository>();
             // Get options from app settings
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
 

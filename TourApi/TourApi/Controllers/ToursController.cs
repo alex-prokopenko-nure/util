@@ -11,11 +11,11 @@ using Microsoft.AspNetCore.Cors;
 namespace TourApi.Controllers
 {
     [Route("[controller]")]
-    public class TourController : Controller
+    public class ToursController : Controller
     {
-        private ITourRepository _tourRepository;
+        private IToursRepository _tourRepository;
 
-        public TourController(ITourRepository tourRepository)
+        public ToursController(IToursRepository tourRepository)
         {
             _tourRepository = tourRepository;
         }

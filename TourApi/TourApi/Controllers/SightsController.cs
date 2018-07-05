@@ -10,11 +10,11 @@ using TourApi.Repos;
 namespace TourApi.Controllers
 {
     [Route("[controller]")]
-    public class SightController : Controller
+    public class SightsController : Controller
     {
-        private ISightRepository _sightRepository;
+        private ISightsRepository _sightRepository;
 
-        public SightController(ISightRepository sightRepository)
+        public SightsController(ISightsRepository sightRepository)
         {
             _sightRepository = sightRepository;
         }

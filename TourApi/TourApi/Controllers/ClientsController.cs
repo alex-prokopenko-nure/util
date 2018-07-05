@@ -10,11 +10,11 @@ using TourApi.Repos;
 namespace TourApi.Controllers
 {
     [Route("[controller]")]
-    public class ClientController : Controller
+    public class ClientsController : Controller
     {
-        private IClientRepository _clientRepository;
+        private IClientsRepository _clientRepository;
 
-        public ClientController(IClientRepository clientRepository)
+        public ClientsController(IClientsRepository clientRepository)
         {
             _clientRepository = clientRepository;
         }
