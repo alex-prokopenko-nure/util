@@ -11,18 +11,18 @@ import { Excursion } from './excursion';
 export class ClientService {
   url: string
   constructor(private http: HttpClient) {
-    this.url = environment.apiUrl;
+    this.url = environment.apiUrl + 'clients/';
   }
 
   getClients(): Observable<Client[]> {
-    return this.http.get<Client[]>(this.url + 'client');
+    return this.http.get<Client[]>(this.url);
   }
 
   getClient(id: string): Observable<Client> {
-    return this.http.get<Client>(this.url + 'client/' + id);
+    return this.http.get<Client>(this.url + id);
   }
 
   insertClient(client: Client): Observable<Client> {
-    return this.http.post<Client>(this.url + 'client', client);
+    return this.http.post<Client>(this.url, client);
   }
 }

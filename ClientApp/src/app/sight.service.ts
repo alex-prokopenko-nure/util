@@ -11,18 +11,18 @@ import { Excursion } from './excursion';
 export class SightService {
   url: string
   constructor(private http: HttpClient) {
-    this.url = environment.apiUrl;
+    this.url = environment.apiUrl + 'sights/';
   }
 
   getAllSights(): Observable<Sight[]> {
-    return this.http.get<Sight[]>(this.url + 'sight');
+    return this.http.get<Sight[]>(this.url);
   }
 
   getSights(id: string): Observable<Sight[]> {
-    return this.http.get<Sight[]>(this.url + 'sight/' + id);
+    return this.http.get<Sight[]>(this.url + id);
   }
 
   insertSight(sight: Sight): Observable<Sight> {
-    return this.http.post<Sight>(this.url + 'sight', sight);
+    return this.http.post<Sight>(this.url, sight);
   }
 }

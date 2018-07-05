@@ -11,26 +11,26 @@ import { Excursion } from './excursion';
 export class TourService {
   url: string
   constructor(private http: HttpClient) {
-    this.url = environment.apiUrl;
+    this.url = environment.apiUrl + 'tours/';
   }
 
   getTours(): Observable<Tour[]> {
-    return this.http.get<Tour[]>(this.url + 'tour');
+    return this.http.get<Tour[]>(this.url);
   }
 
   getTour(id: string): Observable<Tour> {
-    return this.http.get<Tour>(this.url + 'tour/' + id);
+    return this.http.get<Tour>(this.url + id);
   }
 
   insertTour(tour: Tour): Observable<Tour> {
-    return this.http.post<Tour>(this.url + 'tour', tour);
+    return this.http.post<Tour>(this.url, tour);
   }
 
   updateTour(tour: Tour): Observable<Tour> {
-    return this.http.put<Tour>(this.url + 'tour/' + tour.id, tour);
+    return this.http.put<Tour>(this.url + tour.id, tour);
   }
 
   deleteTour(id: string): Observable<string> {
-    return this.http.delete<string>(this.url + 'tour/' + id);
+    return this.http.delete<string>(this.url + id);
   }
 }
