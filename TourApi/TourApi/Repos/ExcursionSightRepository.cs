@@ -26,7 +26,9 @@ namespace TourApi.Repos
 
         public async Task<Tuple<Guid, Guid>> Delete(Guid excursionId, Guid sightId)
         {
-            _dbContext.ExcursionSights.Remove(await _dbContext.ExcursionSights.FirstOrDefaultAsync(x => x.ExcursionId == excursionId && x.SightId == sightId));
+            ExcursionSight exs = new ExcursionSight { ExcursionId = excursionId, SightId = sightId };
+            _dbContext.ExcursionSights.Attach(exs);
+            _dbContext.ExcursionSights.Remove(exs);
             await _dbContext.SaveChangesAsync();
             return new Tuple<Guid, Guid>(excursionId, sightId);
         }

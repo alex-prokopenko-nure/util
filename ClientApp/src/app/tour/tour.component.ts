@@ -13,7 +13,7 @@ import { SightService } from '../sight.service';
 import { ExcursionSightService } from '../excursionsight.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { DialogComponent } from '../dialog/dialog.component';
+import { TourFormComponent } from '../tourform/tourform.component';
 import { Sight } from '../sight';
 
 @Component({
@@ -27,7 +27,7 @@ export class TourComponent implements OnInit {
   today: string;
   excursions: Excursion[] = [];
   clients: Client[] = [];
-  dialogRef: MatDialogRef<DialogComponent>;
+  dialogRef: MatDialogRef<TourFormComponent>;
   client: Client = new Client();
   excursion: Excursion = new Excursion();
   sight: Sight = new Sight();
@@ -50,7 +50,7 @@ export class TourComponent implements OnInit {
   }
 
   openDialog(t?) {
-    this.dialogRef = this.dialog.open(DialogComponent, {
+    this.dialogRef = this.dialog.open(TourFormComponent, {
       data: {
         tour: t ? t : new Tour()
       }

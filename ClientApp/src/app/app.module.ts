@@ -17,7 +17,7 @@ import { TourComponent } from './tour/tour.component';
 import { TourService } from './tour.service';
 import { ExcursionService } from './excursion.service';
 import { ClientService } from './client.service';
-import { DialogComponent } from './dialog/dialog.component';
+import { TourFormComponent } from './tourform/tourform.component';
 import { ExcursionSightService } from './excursionsight.service';
 import { SightService } from './sight.service';
 
@@ -28,7 +28,7 @@ import { SightService } from './sight.service';
     HomeComponent,
     CounterComponent,
     TourComponent,
-    DialogComponent
+    TourFormComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -55,6 +55,6 @@ import { SightService } from './sight.service';
   ],
   providers: [TourService, ExcursionService, ClientService, ExcursionSightService, SightService], 
   bootstrap: [AppComponent],
-  entryComponents: [DialogComponent]
+  entryComponents: [TourFormComponent]
 })
 export class AppModule { }

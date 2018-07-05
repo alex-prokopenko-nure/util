@@ -25,7 +25,9 @@ namespace TourApi.Repos
 
         public async void Delete(Guid id)
         {
-            _dbContext.Clients.Remove(await _dbContext.Clients.FirstOrDefaultAsync(x => x.Id == id));
+            Client client = new Client { Id = id };
+            _dbContext.Clients.Attach(client);
+            _dbContext.Clients.Remove(client);
             await _dbContext.SaveChangesAsync();
         }
 

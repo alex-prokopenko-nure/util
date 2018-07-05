@@ -25,7 +25,9 @@ namespace TourApi.Repos
 
         public async Task<Guid> Delete(Guid id)
         {
-            _dbContext.Sights.Remove(await _dbContext.Sights.FirstOrDefaultAsync(x => x.Id == id));
+            Sight sight = new Sight { Id = id };
+            _dbContext.Sights.Attach(sight);
+            _dbContext.Sights.Remove(sight);
             await _dbContext.SaveChangesAsync();
             return id;
         }

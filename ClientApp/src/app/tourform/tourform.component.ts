@@ -15,11 +15,11 @@ import { ExcursionSightService } from '../excursionsight.service';
 
 
 @Component({
-  templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.css']
+  templateUrl: './tourform.component.html',
+  styleUrls: ['./tourform.component.css']
 })
 
-export class DialogComponent {
+export class TourFormComponent {
   form: FormGroup;
   tours: Tour[];
   excursions: Excursion[] = [];
@@ -39,7 +39,7 @@ export class DialogComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dialogRef: MatDialogRef<DialogComponent>,
+    private dialogRef: MatDialogRef<TourFormComponent>,
     private clientService: ClientService,
     private excursionService: ExcursionService,
     private tourService: TourService,
