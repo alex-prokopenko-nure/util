@@ -36,6 +36,10 @@ export class TourFormComponent {
   filteredSights: Sight[];
   tour: Tour = new Tour();
   today: string;
+  hasDate: boolean = true;
+  hasExcursion: boolean = true;
+  hasClient: boolean = true;
+  hasSights: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -123,6 +127,7 @@ export class TourFormComponent {
       addedSight.id = this.sight.id;
       addedSight.name = this.sight.name;
       this.tourSights.push(addedSight);
+      this.sight = new Sight();
       this.sightCtrl.setValue('');
     });
   }
@@ -199,15 +204,33 @@ export class TourFormComponent {
   }
 
   async createTour() {
-    await this.insertExcursionAndClient();
-    if (this.tourSights.length == 0) {
-      alert("Choose at least one sight for excursion");
+    if (this.tour.date == null) {
+      this.hasDate = false;
       return;
     }
+    this.hasDate = true;
+    if (!this.tour.excursionId && (this.excursionCtrl.value == null || this.excursionCtrl.value == '')) {
+      this.hasExcursion = false;
+      return;
+    }
+    this.hasExcursion = true;
+    if (!this.tour.clientId && (this.clientCtrl.value == null || this.clientCtrl.value == '')) {
+      this.hasClient = false;
+      return;
+    }
+    this.hasClient = true;
+    this.insertExcursionAndClient();
+    if (this.tourSights.length == 0) {
+      this.hasSights = false;
+      return;
+    }
+    this.hasSights = true;
     await this.sleep(300);
     if (this.tour.id == undefined) {
+      localStorage.setItem('mode', 'add');
       this.tourService.insertTour(this.tour).subscribe(result => this.dialogRef.close(result));
     } else {
+      localStorage.setItem('mode', 'edit');
       this.tourService.updateTour(this.tour).subscribe(result => this.dialogRef.close(result));
     }
   }

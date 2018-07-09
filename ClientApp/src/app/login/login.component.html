@@ -1,0 +1,36 @@
+<!--<div *ngIf="authService.isLoggedIn();else form">
+  <h2>You should log out first, in order to register</h2>
+</div>
+<ng-template #form>-->
+  <div *ngIf="registered" class="alert alert-success">Registration succeed</div>
+  <form [formGroup]="form">
+    <fieldset>
+      <legend>Login</legend>
+      <div class="form-field">
+        <label>Email:</label><br />
+        <!--<input name="email" formControlName="email">-->
+        <mat-form-field>
+          <input type="text" matInput name="email" formControlName="email">
+        </mat-form-field>
+      </div>
+      <div class="form-field">
+        <label>Password:</label><br />
+        <mat-form-field>
+          <input type="password" matInput name="password" formControlName="password">
+        </mat-form-field>
+        <!--<input name="password" formControlName="password"
+               type="password">-->
+      </div>
+    </fieldset>
+    <div class="form-buttons">
+      <button class="btn btn-info"
+              (click)="login()">
+        Login
+      </button><br/><br />
+      <a [routerLink]='["/register"]'>
+        <span class='glyphicon glyphicon-edit'></span> Register now
+      </a>
+    </div>
+  </form>
+  <div *ngIf="failed" class="alert alert-danger">Login failed</div>
+<!--</ng-template>-->

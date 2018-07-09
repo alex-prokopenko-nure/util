@@ -15,6 +15,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { TourFormComponent } from '../tourform/tourform.component';
 import { Sight } from '../sight';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-fetch-data',
@@ -31,12 +32,16 @@ export class TourComponent implements OnInit {
   client: Client = new Client();
   excursion: Excursion = new Excursion();
   sight: Sight = new Sight();
+  userName: string;
+  addMessage: boolean = false;
+  editMessage: boolean = false;
 
   constructor(private dialog: MatDialog,
     private clientService: ClientService,
     private excursionService: ExcursionService,
     private tourService: TourService,
     private sightService: SightService,
+    private authService: AuthService,
     http: HttpClient) {
     tourService = new TourService(http);
     excursionService = new ExcursionService(http);
@@ -44,12 +49,15 @@ export class TourComponent implements OnInit {
     this.tourService.getTours().subscribe(result => this.tours = result);
     this.excursionService.getExcursions().subscribe(result => this.excursions = result);
     this.clientService.getClients().subscribe(result => this.clients = result);
+    this.userName = localStorage.getItem('user_name');
   }
 
   ngOnInit() {
   }
 
   openDialog(t?) {
+    this.addMessage = false;
+    this.editMessage = false;
     this.dialogRef = this.dialog.open(TourFormComponent, {
       data: {
         tour: t ? t : new Tour()
@@ -59,6 +67,17 @@ export class TourComponent implements OnInit {
       this.tourService.getTours().subscribe(result => this.tours = result);
       this.excursionService.getExcursions().subscribe(result => this.excursions = result);
       this.clientService.getClients().subscribe(result => this.clients = result);
+
+      let mode = localStorage.getItem('mode');
+      if (mode) {
+        if (mode == 'add') {
+          this.addMessage = true;
+        }
+        else if (mode = 'edit') {
+          this.editMessage = true;
+        }
+      }
+      localStorage.removeItem('mode');
     })
   }
 

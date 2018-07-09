@@ -8,39 +8,122 @@ using System.Threading.Tasks;
 using TourApi.Models;
 using TourApi.ViewModels;
 using TourApi.Helpers;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TourApi.Controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class AccountsController : Controller
     {
-        private readonly ApplicationDbContext _appDbContext;
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
-        private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public AccountsController(UserManager<AppUser> userManager, IMapper mapper, ApplicationDbContext appDbContext)
+        public AccountsController(
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+            IConfiguration configuration
+            )
         {
             _userManager = userManager;
-            _mapper = mapper;
-            _appDbContext = appDbContext;
+            _signInManager = signInManager;
+            _configuration = configuration;
         }
 
-        // POST api/accounts
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]RegistrationViewModel model)
+        public async Task<object> Login([FromBody] LoginDto model)
         {
-            if (!ModelState.IsValid)
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+
+            if (result.Succeeded)
             {
-                return BadRequest(ModelState);
+                var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+                return new User { AppUser = appUser, Token = GenerateJwtToken(model.Email, appUser) };
             }
 
-            var userIdentity = _mapper.Map<AppUser>(model);
+            throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
+        }
 
-            var result = await _userManager.CreateAsync(userIdentity, model.Password);
+        [HttpPost]
+        public async Task<bool> Register([FromBody] RegisterDto model)
+        {
+            var user = new AppUser
+            {
+                UserName = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email
+            };
+            var result = await _userManager.CreateAsync(user, model.Password);
 
-            if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
+            if (result.Succeeded)
+            {
+                return true;
+            }
 
-            return new OkObjectResult("Account created");
+            return false;
+        }
+
+        private string GenerateJwtToken(string email, AppUser user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtExpireDays"]));
+
+            var token = new JwtSecurityToken(
+                _configuration["JwtIssuer"],
+                _configuration["JwtIssuer"],
+                claims,
+                expires: expires,
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public class LoginDto
+        {
+            [Required]
+            public string Email { get; set; }
+
+            [Required]
+            public string Password { get; set; }
+
+        }
+
+        public class RegisterDto
+        {
+            [Required]
+            public string Email { get; set; }
+
+            [Required]
+            [StringLength(100, ErrorMessage = "PASSWORD_MIN_LENGTH", MinimumLength = 6)]
+            public string Password { get; set; }
+
+            [Required]
+            public string FirstName { get; set; }
+
+            [Required]
+            public string LastName { get; set; }
+        }
+
+        public class User
+        {
+            public AppUser AppUser { get; set; }
+            public string Token { get; set; }
         }
     }
 }

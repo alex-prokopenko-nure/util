@@ -12,19 +12,24 @@
         <div class='clearfix'></div>
         <div class='navbar-collapse collapse' [ngClass]='{ "in": isExpanded }'>
             <ul class='nav navbar-nav'>
-                <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                <li *ngIf="!authService.isLoggedIn()" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
                     <a [routerLink]='["/"]' (click)='collapse()'>
-                        <span class='glyphicon glyphicon-home'></span> Home
+                        <span class='glyphicon glyphicon-pencil'></span> Login
                     </a>
                 </li>
-                <li [routerLinkActive]='["link-active"]'>
-                    <a [routerLink]='["/counter"]' (click)='collapse()'>
-                        <span class='glyphicon glyphicon-education'></span> Counter
+                <li *ngIf="!authService.isLoggedIn()" [routerLinkActive]='["link-active"]'>
+                    <a [routerLink]='["/register"]' (click)='collapse()'>
+                        <span class='glyphicon glyphicon-edit'></span> Register
                     </a>
                 </li>
-                <li [routerLinkActive]='["link-active"]'>
+                <li *ngIf="authService.isLoggedIn()" [routerLinkActive]='["link-active"]'>
                     <a [routerLink]='["/tour"]' (click)='collapse()'>
                         <span class='glyphicon glyphicon-th-list'></span> Tours
+                    </a>
+                </li>
+                <li *ngIf="authService.isLoggedIn()" >
+                    <a [routerLink]='["/"]' (click)='authService.logout()'>
+                        <span class='glyphicon glyphicon-remove'></span> Log out
                     </a>
                 </li>
             </ul>

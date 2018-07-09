@@ -1,16 +1,20 @@
 <h1 mat-dialog-title *ngIf="tour.id!=undefined;else add">Change tour</h1>
 <ng-template #add><h1 mat-dialog-title>Add tour</h1></ng-template>
 <mat-dialog-content>
+  <div *ngIf="!hasDate" class="alert alert-danger">Date is required</div>
   <mat-form-field>
     <input type="date" matInput [(ngModel)]="tour.date" min="{{today}}" placeholder="Choose date">
   </mat-form-field><br />
+  <div *ngIf="!hasExcursion" class="alert alert-danger">Excursion is required</div>
   <mat-form-field>
     <input type="text" matInput value="{{getExcursion(tour)}}" placeholder="Choose excursion" [formControl]="excursionCtrl" [matAutocomplete]="auto">
   </mat-form-field><br />
+  <div *ngIf="!hasClient" class="alert alert-danger">Client is required</div>
   <mat-form-field>
     <input type="text" matInput value="{{getClient(tour)}}" placeholder="Choose client" [formControl]="clientCtrl" [matAutocomplete]="avto">
   </mat-form-field>
 </mat-dialog-content>
+<div *ngIf="!hasSights" class="alert alert-danger">At least one sight is required</div>
 <div *ngIf="tour.excursionId">
   <table class="table">
     <thead>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using TourApi.Repos;
 
 namespace TourApi.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class ExcursionSightsController : Controller
     {

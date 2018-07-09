@@ -7,9 +7,11 @@ using TourApi.Models;
 using Microsoft.EntityFrameworkCore;
 using TourApi.Repos;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TourApi.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class ToursController : Controller
     {

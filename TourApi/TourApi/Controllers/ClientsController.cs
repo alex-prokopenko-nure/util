@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TourApi.Models;
@@ -9,6 +10,7 @@ using TourApi.Repos;
 
 namespace TourApi.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class ClientsController : Controller
     {

@@ -1,5 +1,7 @@
-<h1>Tours</h1>
+<h1>Hello, {{userName}}!</h1>
 
+<div *ngIf="addMessage" class="alert alert-success">Tour has been added successfully</div>
+<div *ngIf="editMessage" class="alert alert-success">Tour has been updated successfully</div>
 <button class="btn btn-info" (click)="openDialog()">Add Tour</button>
 <p *ngIf="!tours || !clients || !excursions"><em>Loading...</em></p>
 

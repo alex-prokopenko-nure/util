@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using TourApi.Models;
 
 namespace TourApi.Models
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -16,6 +17,7 @@ namespace TourApi.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<ExcursionSight>()
                 .HasKey(es => new { es.ExcursionId, es.SightId });
         }
@@ -34,6 +36,6 @@ namespace TourApi.Models
         public DbSet<Sight> Sights { get; set; }
         public DbSet<Excursion> Excursions { get; set; }
         public DbSet<ExcursionSight> ExcursionSights { get; set; }
-        public DbSet<AppUser> Users { get; set; }
+        public new DbSet<AppUser> Users { get; set; }
     }
 }
