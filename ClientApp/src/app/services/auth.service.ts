@@ -1,16 +1,14 @@
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { Injectable, Inject } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Tour } from './tour';
-import { Client } from './client';
-import { Sight } from './sight';
-import { Excursion } from './excursion';
+import { Tour } from '../viewmodels/tour';
+import { Client } from '../viewmodels/client';
+import { Sight } from '../viewmodels/sight';
+import { Excursion } from '../viewmodels/excursion';
 import { map, catchError } from 'rxjs/operators';
-import { BaseService } from './base.service';
 import { HttpClient } from '@angular/common/http';
-import { Credentials } from './credentials.interface';
-import { AppUser, User } from './user';
+import { AppUser, User } from '../viewmodels/user';
 
 @Injectable()
 export class AuthService {

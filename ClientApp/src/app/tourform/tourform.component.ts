@@ -1,17 +1,17 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { ClientService } from '../client.service';
-import { ExcursionService } from '../excursion.service';
-import { TourService } from '../tour.service';
+import { ClientService } from '../services/client.service';
+import { ExcursionService } from '../services/excursion.service';
+import { TourService } from '../services/tour.service';
 import { HttpClient } from '@angular/common/http';
-import { Excursion } from '../excursion';
-import { Tour } from '../tour';
-import { Client } from '../client';
+import { Excursion } from '../viewmodels/excursion';
+import { Tour } from '../viewmodels/tour';
+import { Client } from '../viewmodels/client';
 import { startWith, map } from 'rxjs/operators';
-import { Sight } from '../sight';
-import { SightService } from '../sight.service';
-import { ExcursionSightService } from '../excursionsight.service';
+import { Sight } from '../viewmodels/sight';
+import { SightService } from '../services/sight.service';
+import { ExcursionSightService } from '../services/excursionsight.service';
 
 
 @Component({
@@ -53,10 +53,6 @@ export class TourFormComponent {
     @Inject(MAT_DIALOG_DATA) private data
   )
   {
-    //tourService = new TourService(http);
-    //excursionService = new ExcursionService(http);
-    //clientService = new ClientService(http);
-    //sightService = new SightService(http);
     this.sight.name = '';
     this.tourService.getTours().subscribe(result => this.tours = result);
     this.excursionService.getExcursions().subscribe(result => { this.excursions = result; this.filterExcursions(''); });
@@ -219,7 +215,7 @@ export class TourFormComponent {
       return;
     }
     this.hasClient = true;
-    this.insertExcursionAndClient();
+    await this.insertExcursionAndClient();
     if (this.tourSights.length == 0) {
       this.hasSights = false;
       return;

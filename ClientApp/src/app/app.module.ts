@@ -14,21 +14,21 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { LoginFormComponent } from './login/login.component';
 import { RegisterFormComponent } from './register/register.component';
 import { TourComponent } from './tour/tour.component';
-import { TourService } from './tour.service';
-import { ExcursionService } from './excursion.service';
-import { ClientService } from './client.service';
+import { TourService } from './services/tour.service';
+import { ExcursionService } from './services/excursion.service';
+import { ClientService } from './services/client.service';
 import { TourFormComponent } from './tourform/tourform.component';
-import { ExcursionSightService } from './excursionsight.service';
-import { SightService } from './sight.service';
-import { AuthService } from './auth.service';
+import { ExcursionSightService } from './services/excursionsight.service';
+import { SightService } from './services/sight.service';
+import { AuthService } from './services/auth.service';
 import { HttpModule } from '@angular/http';
-import { AuthInterceptor } from './interceptor';
+import { AuthInterceptor } from './httphelpers/interceptor';
 import {
   AuthGuardService as AuthGuard, AuthGuardService
-} from './auth.guard';
+} from './httphelpers/auth.guard';
 import {
   UnauthGuardService as UnauthGuard, UnauthGuardService
-} from './unauth.guard';
+} from './httphelpers/unauth.guard';
 
 @NgModule({
   declarations: [

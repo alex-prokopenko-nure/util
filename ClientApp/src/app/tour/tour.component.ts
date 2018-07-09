@@ -1,21 +1,21 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { TourService } from '../tour.service';
-import { Tour } from '../tour';
-import { Excursion } from '../excursion';
-import { Client } from '../client';
+import { TourService } from '../services/tour.service';
+import { Tour } from '../viewmodels/tour';
+import { Excursion } from '../viewmodels/excursion';
+import { Client } from '../viewmodels/client';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { ExcursionService } from '../excursion.service';
-import { ClientService } from '../client.service';
-import { SightService } from '../sight.service';
-import { ExcursionSightService } from '../excursionsight.service';
+import { ExcursionService } from '../services/excursion.service';
+import { ClientService } from '../services/client.service';
+import { SightService } from '../services/sight.service';
+import { ExcursionSightService } from '../services/excursionsight.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { TourFormComponent } from '../tourform/tourform.component';
-import { Sight } from '../sight';
-import { AuthService } from '../auth.service';
+import { Sight } from '../viewmodels/sight';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-fetch-data',
