@@ -16,6 +16,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { TourFormComponent } from '../tourform/tourform.component';
 import { Sight } from '../viewmodels/sight';
 import { AuthService } from '../services/auth.service';
+import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-fetch-data',
@@ -28,13 +29,12 @@ export class TourComponent implements OnInit {
   today: string;
   excursions: Excursion[] = [];
   clients: Client[] = [];
-  dialogRef: MatDialogRef<TourFormComponent>;
+  tourFormRef: MatDialogRef<TourFormComponent>;
+  dialogRef: MatDialogRef<DialogComponent>;
   client: Client = new Client();
   excursion: Excursion = new Excursion();
   sight: Sight = new Sight();
   userName: string;
-  addMessage: boolean = false;
-  editMessage: boolean = false;
 
   constructor(private dialog: MatDialog,
     private clientService: ClientService,
@@ -56,43 +56,38 @@ export class TourComponent implements OnInit {
   }
 
   openDialog(t?) {
-    this.addMessage = false;
-    this.editMessage = false;
-    this.dialogRef = this.dialog.open(TourFormComponent, {
+    this.tourService.mode = "none";
+    this.tourFormRef = this.dialog.open(TourFormComponent, {
       data: {
         tour: t ? t : new Tour()
       }
     });
-    this.dialogRef.afterClosed().subscribe(tour => {
+    this.tourFormRef.afterClosed().subscribe(tour => {
       this.tourService.getTours().subscribe(result => this.tours = result);
       this.excursionService.getExcursions().subscribe(result => this.excursions = result);
       this.clientService.getClients().subscribe(result => this.clients = result);
-
-      let mode = localStorage.getItem('mode');
-      if (mode) {
-        if (mode == 'add') {
-          this.addMessage = true;
-        }
-        else if (mode = 'edit') {
-          this.editMessage = true;
-        }
-      }
-      localStorage.removeItem('mode');
     })
   }
 
   deleteTour(id: string) {
-    this.tourService.deleteTour(id).subscribe(result => {
-      let found = false;
-      for (let i = 0; i < this.tours.length; ++i) {
-        if (found)
-          this.tours[i - 1] = this.tours[i];
-        if (this.tours[i].id == result) {
-          found = true;
+    this.dialogRef = this.dialog.open(DialogComponent);
+    this.dialogRef.afterClosed().subscribe(
+      result => {
+        if (result) {
+          this.tourService.deleteTour(id).subscribe(result => {
+            let found = false;
+            for (let i = 0; i < this.tours.length; ++i) {
+              if (found)
+                this.tours[i - 1] = this.tours[i];
+              if (this.tours[i].id == result) {
+                found = true;
+              }
+            }
+            this.tours.pop();
+          });
         }
       }
-      this.tours.pop();
-    });
+    )
   }
 
   getClient(t: Tour) {

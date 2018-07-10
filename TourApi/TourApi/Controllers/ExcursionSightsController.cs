@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TourApi.Repos;
+using TourApi.ViewModels;
 
 namespace TourApi.Controllers
 {
@@ -35,19 +36,16 @@ namespace TourApi.Controllers
         [HttpPost]
         public async Task<IActionResult> AddExcursionSight([FromBody] Pair ids)
         {
-            return Ok(await _excursionSightRepository.Create(ids.ExcursionId, ids.SightId));
+            var result = await _excursionSightRepository.Create(ids.ExcursionId, ids.SightId);
+            if (result != null)
+                return Ok(result);
+            return BadRequest();
         }
 
         [HttpDelete("{excursionId}/{sightId}")]
         public async Task<IActionResult> DeleteExcursionSight(Guid excursionId, Guid sightId)
         {
             return Ok(await _excursionSightRepository.Delete(excursionId, sightId));
-        }
-
-        public class Pair
-        {
-            public Guid ExcursionId { get; set; }
-            public Guid SightId { get; set; }
         }
     }
 }

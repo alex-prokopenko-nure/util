@@ -1,9 +1,9 @@
 <h1>Hello, {{userName}}!</h1>
 
-<div *ngIf="addMessage" class="alert alert-success">Tour has been added successfully</div>
-<div *ngIf="editMessage" class="alert alert-success">Tour has been updated successfully</div>
+<div *ngIf="tourService.mode=='add'" class="alert alert-success">Tour has been added successfully</div>
+<div *ngIf="tourService.mode=='edit'" class="alert alert-success">Tour has been updated successfully</div>
 <button class="btn btn-info" (click)="openDialog()">Add Tour</button>
-<p *ngIf="!tours || !clients || !excursions"><em>Loading...</em></p>
+<mat-spinner *ngIf="!tours || !clients || !excursions"></mat-spinner>
 
 <table class='table' *ngIf="tours">
   <thead>
@@ -21,7 +21,7 @@
       <td>{{ getExcursion(t) }} </td>
       <td>{{ getClient(t) }}</td>
       <td>
-        <button class="btn btn-danger" (click)="deleteTour(t.id); $event.stopPropagation();"><span class="glyphicon glyphicon-remove" (click)="deleteTour(t.id)"></span></button>
+        <button class="btn btn-danger" (click)="deleteTour(t.id); $event.stopPropagation();"><span class="glyphicon glyphicon-remove"></span></button>
       </td>
     </tr>
   </tbody>

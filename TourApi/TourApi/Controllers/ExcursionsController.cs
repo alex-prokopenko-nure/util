@@ -38,12 +38,5 @@ namespace TourApi.Controllers
         {
             return Ok(await _excursionRepository.Create(excursion));
         }
-
-        [HttpDelete("{id}")]
-        public Guid DeleteExcursion(Guid id)
-        {
-            _excursionRepository.Delete(id);
-            return id;
-        }
     }
 }

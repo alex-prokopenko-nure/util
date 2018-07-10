@@ -16,12 +16,21 @@ namespace TourApi.Repos
             _dbContext = dbContext;
         }
 
+        private bool Contains(ExcursionSight exs)
+        {
+            return _dbContext.ExcursionSights.FirstOrDefault(x => x.ExcursionId == exs.ExcursionId && x.SightId == exs.SightId) != null;
+        }
+
         public async Task<ExcursionSight> Create(Guid excursionId, Guid sightId)
         {
             ExcursionSight exs = new ExcursionSight { ExcursionId = excursionId, SightId = sightId };
-            await _dbContext.ExcursionSights.AddAsync(exs);
-            await _dbContext.SaveChangesAsync();
-            return exs;
+            if (!Contains(exs))
+            {
+                await _dbContext.ExcursionSights.AddAsync(exs);
+                await _dbContext.SaveChangesAsync();
+                return exs;
+            }
+            return null;
         }
 
         public async Task<Tuple<Guid, Guid>> Delete(Guid excursionId, Guid sightId)

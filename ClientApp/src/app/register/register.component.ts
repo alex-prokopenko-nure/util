@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthService } from '../services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ValidatePasswords } from '../validators/equality.validator';
 
 @Component({
   selector: 'app-register',
@@ -12,6 +13,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 export class RegisterFormComponent {
   failed: boolean = false;
+  clicked: boolean = false;
   form: FormGroup;
 
   constructor(private fb: FormBuilder,
@@ -19,26 +21,36 @@ export class RegisterFormComponent {
     private router: Router) {
 
     this.form = this.fb.group({
-      email: ['', Validators.required],
+      email: ['', Validators.compose([Validators.required, Validators.email])],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       password: ['', Validators.required],
       confirmedPassword: ['', Validators.required]
-    });
+    }, { validator: this.EqualityValidator });
+  }
+
+  EqualityValidator (control: FormGroup) {
+    const val = control.value;
+    let condition = val.password == val.confirmedPassword;
+    if (!condition) {
+      return { EqualityValidator: 'passwords do not match' }
+    }
+    return null;
   }
 
   register() {
     const val = this.form.value;
-
-    if (val.email && val.firstName && val.lastName && val.password && val.password == val.confirmedPassword) {
+    if (this.form.valid) {
+      this.clicked = true;
+      this.failed = false;
       this.authService.register(val.email, val.firstName, val.lastName, val.password)
         .subscribe(
         result => {
-          localStorage.setItem('registered', result.toString());
             this.router.navigateByUrl('/');
           },
           error => {
             this.failed = true;
+            this.clicked = false;
           }
         );
     }

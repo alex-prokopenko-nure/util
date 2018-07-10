@@ -18,7 +18,6 @@ using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using TourApi.Helpers;
 using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -26,9 +25,6 @@ namespace TourApi
 {
     public class Startup
     {
-        private const string SecretKey = "iNivDmHLpUA223sqsfhqGbMRdRj1PVkH"; 
-        private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -87,13 +83,10 @@ namespace TourApi
         {
             if (env.IsDevelopment())
             {
-                app.UseHttpStatusCodeExceptionMiddleware();
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                app.UseHttpStatusCodeExceptionMiddleware();
-
                 app.UseHsts();
             }
 

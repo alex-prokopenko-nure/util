@@ -9,7 +9,8 @@ import { Excursion } from '../viewmodels/excursion';
 
 @Injectable()
 export class TourService {
-  url: string
+  url: string;
+  mode: string;
   constructor(private http: HttpClient) {
     this.url = environment.apiUrl + 'tours/';
   }

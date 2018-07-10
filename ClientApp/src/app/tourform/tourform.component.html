@@ -32,14 +32,15 @@
       </tr>
     </tbody>
   </table>
+  <div *ngIf="showErrorMes" class="alert alert-danger">{{errorMes}}</div>
   <mat-form-field>
-    <input type="text" matInput placeholder="Add sight" [formControl]="sightCtrl" [matAutocomplete]="avito">
+    <input type="text" matInput placeholder="Add sight" (keyup.enter)="addSight()" [formControl]="sightCtrl" [matAutocomplete]="avito">
   </mat-form-field><br />
   <button mat-button (click)="addSight()">Add new sight</button>
 </div>
 <mat-dialog-actions>
   <button mat-button (click)="createTour()"><span *ngIf="tour.id==undefined">Add</span><span *ngIf="tour.id!=undefined">Update</span></button>
-  <button mat-button type="button" mat-dialog-close>Cancel</button>
+  <button mat-button (click)="close()">Close</button>
 </mat-dialog-actions>
 
 <mat-autocomplete #auto="matAutocomplete">

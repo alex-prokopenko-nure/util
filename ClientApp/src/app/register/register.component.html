@@ -2,56 +2,58 @@
   <h2>You should log out first, in order to register</h2>
 </div>
 <ng-template #form>-->
-  <form [formGroup]="form">
-    <fieldset>
-      <legend>Register</legend>
-      <div class="form-field">
-        <label>Email:</label><br />
-        <!--<input name="email" formControlName="email">-->
-        <mat-form-field>
-          <input type="text" matInput name="email" formControlName="email">
-        </mat-form-field>
-      </div>
-      <div class="form-field">
-        <label>First name:</label><br />
-        <!--<input name="email" formControlName="email">-->
-        <mat-form-field>
-          <input type="text" matInput name="firstName" formControlName="firstName">
-        </mat-form-field>
-      </div>
-      <div class="form-field">
-        <label>Last name:</label><br />
-        <!--<input name="email" formControlName="email">-->
-        <mat-form-field>
-          <input type="text" matInput name="lastName" formControlName="lastName">
-        </mat-form-field>
-      </div>
-      <div class="form-field">
-        <label>Password:</label><br />
-        <mat-form-field>
-          <input type="password" matInput name="password" formControlName="password">
-        </mat-form-field>
-        <!--<input name="password" formControlName="password"
-         type="password">-->
-      </div>
-      <div class="form-field">
-        <label>Confirm password:</label><br />
-        <mat-form-field>
-          <input type="password" matInput name="confirmedPassword" formControlName="confirmedPassword">
-        </mat-form-field>
-        <!--<input name="password" formControlName="password"
-         type="password">-->
-      </div>
-    </fieldset>
-    <div class="form-buttons">
-      <button class="btn btn-info"
-              (click)="register()">
-        Register
-      </button><br/><br/>
-      <a [routerLink]='["/"]'>
-        <span class='glyphicon glyphicon-pencil'></span> Login now
-      </a>
+<form *ngIf="!clicked" [formGroup]="form">
+  <fieldset>
+    <legend>Register</legend>
+    <div class="form-field">
+      <label>Email:</label><br />
+      <!--<input name="email" formControlName="email">-->
+      <mat-form-field>
+        <input type="text" matInput name="email" formControlName="email">
+      </mat-form-field>
     </div>
-  </form>
-  <div *ngIf="failed" class="alert alert-danger">Registration failed</div>
+    <div class="form-field">
+      <label>First name:</label><br />
+      <!--<input name="email" formControlName="email">-->
+      <mat-form-field>
+        <input type="text" matInput name="firstName" formControlName="firstName">
+      </mat-form-field>
+    </div>
+    <div class="form-field">
+      <label>Last name:</label><br />
+      <!--<input name="email" formControlName="email">-->
+      <mat-form-field>
+        <input type="text" matInput name="lastName" formControlName="lastName">
+      </mat-form-field>
+    </div>
+    <div class="form-field">
+      <label>Password:</label><br />
+      <mat-form-field>
+        <input type="password" matInput name="password" formControlName="password">
+      </mat-form-field>
+      <!--<input name="password" formControlName="password"
+       type="password">-->
+    </div>
+    <div class="form-field">
+      <label>Confirm password:</label><br />
+      <mat-form-field>
+        <input type="password" matInput name="confirmedPassword" formControlName="confirmedPassword">
+      </mat-form-field>
+      <!--<input name="password" formControlName="password"
+       type="password">-->
+    </div>
+  </fieldset>
+  <div class="form-buttons">
+    <button class="btn btn-info"
+            (click)="register()">
+      Register
+    </button><br /><br />
+    <a [routerLink]='["/"]'>
+      <span class='glyphicon glyphicon-pencil'></span> Login now
+    </a>
+  </div>
+</form>
+<mat-spinner *ngIf="clicked"></mat-spinner>
+<div *ngIf="!clicked && form.controls.confirmedPassword.touched && (form.invalid || form.dirty)" class="alert alert-danger">Passwords do not match</div>
+<div *ngIf="failed" class="alert alert-danger">Registration failed</div>
 <!--</ng-template>-->

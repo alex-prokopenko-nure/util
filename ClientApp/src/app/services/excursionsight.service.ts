@@ -6,6 +6,7 @@ import { Tour } from '../viewmodels/tour';
 import { Client } from '../viewmodels/client';
 import { Sight } from '../viewmodels/sight';
 import { Excursion } from '../viewmodels/excursion';
+import { Pair } from '../viewmodels/pair';
 
 @Injectable()
 export class ExcursionSightService {
@@ -15,18 +16,13 @@ export class ExcursionSightService {
   }
 
   insertSight(excursionId: string, sightId: string): Observable<any> {
-	let ids: Pair = new Pair();
-	ids.excursionId = excursionId;
-	ids.sightId = sightId;
+	  let ids: Pair = new Pair();
+	  ids.excursionId = excursionId;
+    ids.sightId = sightId;
     return this.http.post<any>(this.url, ids);
   }
 
   deleteSight(excursionId: string, sightId: string): Observable<any> {
     return this.http.delete<any>(this.url + excursionId + '/' + sightId);
   }
-}
-
-export class Pair {
-	excursionId: string;
-	sightId: string;
 }

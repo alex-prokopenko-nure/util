@@ -13,16 +13,18 @@ import { AppUser, User } from '../viewmodels/user';
 @Injectable()
 export class AuthService {
   url: string;
+  registered: boolean;
   constructor(private http: HttpClient) {
     this.url = environment.apiUrl;
   }
 
   register(email: string, firstName: string, lastName: string, password: string) {
-    alert(email + password + firstName + lastName);
+    this.registered = true;
     return this.http.post<boolean>(this.url + 'accounts/register', { email, password, firstName, lastName });
   }
 
   login(email: string, password: string) {
+    this.registered = false;
     return this.http.post<User>(this.url + 'accounts/login', { email, password });
   }
 
@@ -33,5 +35,9 @@ export class AuthService {
 
   public isLoggedIn() {
     return localStorage.getItem('auth_token') != null;
+  }
+
+  public isRegistered() {
+    return this.registered;
   }
 }

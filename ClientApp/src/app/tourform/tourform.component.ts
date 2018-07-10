@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, HostListener } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ClientService } from '../services/client.service';
@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { Excursion } from '../viewmodels/excursion';
 import { Tour } from '../viewmodels/tour';
 import { Client } from '../viewmodels/client';
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, catchError } from 'rxjs/operators';
 import { Sight } from '../viewmodels/sight';
 import { SightService } from '../services/sight.service';
 import { ExcursionSightService } from '../services/excursionsight.service';
@@ -40,6 +40,8 @@ export class TourFormComponent {
   hasExcursion: boolean = true;
   hasClient: boolean = true;
   hasSights: boolean = true;
+  showErrorMes: boolean = false;
+  errorMes: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -55,9 +57,9 @@ export class TourFormComponent {
   {
     this.sight.name = '';
     this.tourService.getTours().subscribe(result => this.tours = result);
-    this.excursionService.getExcursions().subscribe(result => { this.excursions = result; this.filterExcursions(''); });
-    this.clientService.getClients().subscribe(result => { this.clients = result; this.filterClients(''); });
-    this.sightService.getAllSights().subscribe(result => { this.sights = result; this.filterSights(''); });
+    this.excursionService.getExcursions().subscribe(result => this.excursions = result);
+    this.clientService.getClients().subscribe(result => this.clients = result);
+    this.sightService.getAllSights().subscribe(result => this.sights = result);
     this.excursionCtrl = new FormControl();
     this.excursionCtrl.valueChanges
       .pipe(
@@ -91,19 +93,20 @@ export class TourFormComponent {
         this.sight.name = this.sightCtrl.value;
         this.sight.id = this.sightExists(this.sightCtrl.value);
       });
+    dialogRef.disableClose = true;
+    dialogRef.backdropClick().subscribe(_ => {
+      if (this.tour.excursionId != undefined && this.tourSights.length == 0) {
+        this.hasSights = false;
+      } else {
+        dialogRef.close();
+      }
+    });
   }
 
   ngOnInit() {
     this.tour = this.data.tour;
     var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1;
-    var yyyy = today.getFullYear();
-    var day, month;
-    dd < 10 ? day = '0' + dd : day = dd;
-    mm < 10 ? month = '0' + mm : month = mm;
-
-    this.today = yyyy + '-' + month + '-' + day;
+    this.today = today.getFullYear() + '-' + ((today.getMonth() + 1 < 10) ? '0' + (today.getMonth() + 1) : today.getMonth() + 1) + '-' + ((today.getDate() < 10) ? '0' + today.getDate() : today.getDate());
     if (this.tour.id != undefined) {
       this.sightService.getSights(this.tour.excursionId).subscribe(result => this.tourSights = result);
     }
@@ -114,18 +117,24 @@ export class TourFormComponent {
   }
 
   async addSight() {
+    this.hasSights = true;
+    this.showErrorMes = false;
     if (this.sight.id == undefined) {
       this.sightService.insertSight(this.sight).subscribe(result => { this.sights.push(result); this.sight = result });
     }
     await this.sleep(300);
     this.excursionSightService.insertSight(this.tour.excursionId, this.sight.id).subscribe(result => {
-      let addedSight = new Sight();
-      addedSight.id = this.sight.id;
-      addedSight.name = this.sight.name;
-      this.tourSights.push(addedSight);
-      this.sight = new Sight();
-      this.sightCtrl.setValue('');
-    });
+        let addedSight = new Sight();
+        addedSight.id = this.sight.id;
+        addedSight.name = this.sight.name;
+        this.tourSights.push(addedSight);
+        this.sight = new Sight();
+        this.sightCtrl.setValue('');
+      },
+      error => {
+        this.errorMes = "You can't add sight twice";
+        this.showErrorMes = true;
+      });
   }
 
   filterExcursions(name: string) {
@@ -144,27 +153,18 @@ export class TourFormComponent {
   }
 
   clientExists(name: string) {
-    for (let i = 0; i < this.clients.length; ++i) {
-      if (this.clients[i].name == name)
-        return this.clients[i].id;
-    }
-    return undefined;
+    let filtered = this.clients.filter(client => client.name == name);
+    return filtered.length ? filtered[0].id : undefined;
   }
 
   excursionExists(name: string) {
-    for (let i = 0; i < this.excursions.length; ++i) {
-      if (this.excursions[i].name == name)
-        return this.excursions[i].id;
-    }
-    return undefined;
+    let filtered = this.excursions.filter(excursion => excursion.name == name);
+    return filtered.length ? filtered[0].id : undefined;
   }
 
   sightExists(name: string) {
-    for (let i = 0; i < this.sights.length; ++i) {
-      if (this.sights[i].name == name)
-        return this.sights[i].id;
-    }
-    return undefined;
+    let filtered = this.sights.filter(sight => sight.name == name);
+    return filtered.length ? filtered[0].id : undefined;
   }
 
   chooseExcursion(excursion: Excursion) {
@@ -179,12 +179,12 @@ export class TourFormComponent {
     this.sightCtrl.setValue(sight.name);
   }
 
-  async insertExcursionAndClient() {
+  insertExcursionAndClient() {
     if (this.tour.clientId == undefined) {
       var client = new Client();
       client.name = this.clientCtrl.value;
 
-      await this.clientService.insertClient(client).subscribe(result => {
+      this.clientService.insertClient(client).subscribe(result => {
         this.tour.clientId = result.id;
       })
     }
@@ -192,11 +192,10 @@ export class TourFormComponent {
       var excursion = new Excursion();
       excursion.name = this.excursionCtrl.value;
 
-      await this.excursionService.insertExcursion(excursion).subscribe(result => {
+      this.excursionService.insertExcursion(excursion).subscribe(result => {
         this.tour.excursionId = result.id;
       });
     }
-    return 0;
   }
 
   async createTour() {
@@ -215,7 +214,7 @@ export class TourFormComponent {
       return;
     }
     this.hasClient = true;
-    await this.insertExcursionAndClient();
+    this.insertExcursionAndClient();
     if (this.tourSights.length == 0) {
       this.hasSights = false;
       return;
@@ -223,10 +222,10 @@ export class TourFormComponent {
     this.hasSights = true;
     await this.sleep(300);
     if (this.tour.id == undefined) {
-      localStorage.setItem('mode', 'add');
+      this.tourService.mode = "add";
       this.tourService.insertTour(this.tour).subscribe(result => this.dialogRef.close(result));
     } else {
-      localStorage.setItem('mode', 'edit');
+      this.tourService.mode = "edit";
       this.tourService.updateTour(this.tour).subscribe(result => this.dialogRef.close(result));
     }
   }
@@ -249,5 +248,13 @@ export class TourFormComponent {
 
   deleteSight(sight: Sight) {
     this.excursionSightService.deleteSight(this.tour.excursionId, sight.id).subscribe(result => this.sightService.getSights(this.tour.excursionId).subscribe(result => this.tourSights = result));
+  }
+
+  close() {
+    if (this.tour.excursionId && this.tourSights.length == 0) {
+      this.hasSights = false;
+    } else {
+      this.dialogRef.close();
+    }
   }
 }

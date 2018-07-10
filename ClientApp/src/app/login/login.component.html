@@ -2,8 +2,8 @@
   <h2>You should log out first, in order to register</h2>
 </div>
 <ng-template #form>-->
-  <div *ngIf="registered" class="alert alert-success">Registration succeed</div>
-  <form [formGroup]="form">
+  <div *ngIf="!clicked&&authService.registered" class="alert alert-success">Registration succeed</div>
+  <form *ngIf="!clicked" [formGroup]="form">
     <fieldset>
       <legend>Login</legend>
       <div class="form-field">
@@ -32,5 +32,6 @@
       </a>
     </div>
   </form>
+  <mat-spinner *ngIf="clicked"></mat-spinner>
   <div *ngIf="failed" class="alert alert-danger">Login failed</div>
 <!--</ng-template>-->

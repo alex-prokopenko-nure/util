@@ -13,25 +13,24 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class LoginFormComponent {
   registered: boolean = false;
   failed: boolean = false;
+  clicked: boolean = false;
   form: FormGroup;
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
     private router: Router) {
-    this.registered = localStorage.getItem('registered') != null;
-
     this.form = this.fb.group({
-      email: ['', Validators.required],
+      email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.required]
     });
   }
 
   login() {
-    if (localStorage.getItem('registered'))
-      localStorage.removeItem('registered');
     const val = this.form.value;
 
-    if (val.email && val.password) {
+    if (this.form.valid) {
+      this.failed = false;
+      this.clicked = true;
       this.authService.login(val.email, val.password)
         .subscribe(
         result => {
@@ -42,6 +41,7 @@ export class LoginFormComponent {
         },
         error => {
           this.failed = true;
+          this.clicked = false;
         }
         );
     }
