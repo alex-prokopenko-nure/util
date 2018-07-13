@@ -25,4 +25,7 @@ D:\repo\TourApi\TourApi\obj\Debug\netcoreapp2.1\TourApi.AssemblyInfo.cs
 D:\repo\TourApi\TourApi\obj\Debug\netcoreapp2.1\TourApi.RazorTargetAssemblyInfo.cache
 D:\repo\TourApi\TourApi\obj\Debug\netcoreapp2.1\TourApi.dll
 D:\repo\TourApi\TourApi\obj\Debug\netcoreapp2.1\TourApi.pdb
+D:\repo\TourApi\TourApi\bin\Debug\netcoreapp2.1\NUnit3.TestAdapter.dll
+D:\repo\TourApi\TourApi\bin\Debug\netcoreapp2.1\nunit.engine.netstandard.dll
+D:\repo\TourApi\TourApi\bin\Debug\netcoreapp2.1\Mono.Cecil.dll
 D:\repo\TourApi\TourApi\obj\Debug\netcoreapp2.1\TourApi.csprojAssemblyReference.cache

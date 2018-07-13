@@ -45,10 +45,13 @@ namespace TourApi.Repos
         public async Task<Tour> Update(Tour tour)
         {
             Tour updatedTour = await _dbContext.Tours.FirstOrDefaultAsync(x => x.Id == tour.Id);
-            updatedTour.Date = tour.Date;
-            updatedTour.ExcursionId = tour.ExcursionId;
-            updatedTour.ClientId = tour.ClientId;
-            await _dbContext.SaveChangesAsync();
+            if (updatedTour != null)
+            {
+                updatedTour.Date = tour.Date;
+                updatedTour.ExcursionId = tour.ExcursionId;
+                updatedTour.ClientId = tour.ClientId;
+                await _dbContext.SaveChangesAsync();
+            }
             return updatedTour;
         }
     }

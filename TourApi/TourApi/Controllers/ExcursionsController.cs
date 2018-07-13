@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -30,13 +31,25 @@ namespace TourApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetExcursion(Guid id)
         {
-            return Ok(await _excursionRepository.Get(id));
+            var result = await _excursionRepository.Get(id);
+            if(result != null)
+                return Ok(result);
+            return BadRequest();
         }
 
         [HttpPost]
         public async Task<IActionResult> AddExcursion([FromBody]Excursion excursion)
         {
-            return Ok(await _excursionRepository.Create(excursion));
+            Excursion result;
+            try
+            {
+                result = await _excursionRepository.Create(excursion);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
         }
     }
 }

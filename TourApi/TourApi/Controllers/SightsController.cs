@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using TourApi.Models;
@@ -30,19 +32,25 @@ namespace TourApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSights(Guid id)
         {
-            return Ok(await _sightRepository.GetSights(id));
+            var result = await _sightRepository.GetSights(id);
+            if(result != null)
+                return Ok(result);
+            return BadRequest();
         }
 
         [HttpPost]
         public async Task<IActionResult> AddSight([FromBody]Sight sight)
         {
-            return Ok(await _sightRepository.Create(sight));
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            return Ok(await _sightRepository.Delete(id));
+            Sight result;
+            try
+            {
+                result = await _sightRepository.Create(sight);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
         }
     }
 }

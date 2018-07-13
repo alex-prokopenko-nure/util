@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using TourApi.Repos;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
+using System.Data.SqlClient;
 
 namespace TourApi.Controllers
 {
@@ -31,25 +32,49 @@ namespace TourApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTour(Guid id)
         {
-            return Ok(await _tourRepository.Get(id));
+            var result = await _tourRepository.Get(id);
+            if(result != null)
+                return Ok(result);
+            return BadRequest();
         }
 
         [HttpPost]
         public async Task<IActionResult> AddTour([FromBody]Tour tour)
         {
-            return Ok( await _tourRepository.Create(tour));
+            Tour result;
+            try
+            {
+                result = await _tourRepository.Create(tour);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> ChangeTour(Guid id, [FromBody]Tour tour)
         {
-            return Ok(await _tourRepository.Update(tour));
+            var result = await _tourRepository.Update(tour);
+            if(result != null)
+                return Ok(result);
+            return BadRequest();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTour(Guid id)
         {
-            return Ok(await _tourRepository.Delete(id));
+            Guid result;
+            try
+            {
+                result = await _tourRepository.Delete(id);
+            }
+            catch(DbUpdateConcurrencyException ex)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
         }
     }
 }

@@ -37,21 +37,21 @@ namespace TourApi.Controllers
         }
 
         [HttpPost]
-        public async Task<object> Login([FromBody] LoginDto model)
+        public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
             var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
             if (result.Succeeded)
             {
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                return new User { AppUser = appUser, Token = JwtGenerator.GenerateJwtToken(model.Email, appUser, _configuration) };
+                return Ok(new User { AppUser = appUser, Token = JwtGenerator.GenerateJwtToken(model.Email, appUser, _configuration) });
             }
 
-            throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
+            return BadRequest();
         }
 
         [HttpPost]
-        public async Task<bool> Register([FromBody] RegisterDto model)
+        public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
             var user = new AppUser
             {
@@ -64,10 +64,10 @@ namespace TourApi.Controllers
 
             if (result.Succeeded)
             {
-                return true;
+                return Ok(true);
             }
 
-            return false;
+            return BadRequest();
         }
     }
 }

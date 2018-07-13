@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -30,13 +31,25 @@ namespace TourApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetClient(Guid id)
         {
-            return Ok(await _clientRepository.Get(id));
+            Client result = await _clientRepository.Get(id);
+            if(result != null)
+                return Ok(result);
+            return BadRequest();
         }
 
         [HttpPost]
         public async Task<IActionResult> AddClient([FromBody]Client client)
         {
-            return Ok(await _clientRepository.Create(client));
+            Client result;
+            try
+            {
+                result = await _clientRepository.Create(client);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
         }
 
 

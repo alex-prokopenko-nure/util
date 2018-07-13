@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,18 +22,6 @@ namespace TourApi.Controllers
             _excursionSightRepository = excursionSightRepository;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllSights()
-        {
-            return Ok(await _excursionSightRepository.GetAll());
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetSights(Guid id)
-        {
-            return Ok(await _excursionSightRepository.GetExcursionSights(id));
-        }
-
         [HttpPost]
         public async Task<IActionResult> AddExcursionSight([FromBody] Pair ids)
         {
@@ -45,7 +34,16 @@ namespace TourApi.Controllers
         [HttpDelete("{excursionId}/{sightId}")]
         public async Task<IActionResult> DeleteExcursionSight(Guid excursionId, Guid sightId)
         {
-            return Ok(await _excursionSightRepository.Delete(excursionId, sightId));
+            Tuple<Guid, Guid> result;
+            try
+            {
+                result = await _excursionSightRepository.Delete(excursionId, sightId);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
         }
     }
 }
