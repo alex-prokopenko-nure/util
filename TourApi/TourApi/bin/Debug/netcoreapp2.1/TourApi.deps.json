@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "8d46a1f64b5a9bc2465ca4aab7d5f29c5b9aa792"
+    "signature": "f6a87cb971fb939215fb83787d19ec975524b351"
   },
   "compilationOptions": {
     "defines": [
@@ -26,7 +26,9 @@
         "dependencies": {
           "AutoMapper": "7.0.1",
           "FluentValidation": "7.6.103",
+          "Microsoft.AspNetCore": "2.1.0",
           "Microsoft.AspNetCore.App": "2.1.0",
+          "Microsoft.AspNetCore.TestHost": "2.1.0",
           "Microsoft.NET.Test.Sdk": "15.7.2",
           "Microsoft.NETCore.App": "2.1.0",
           "Moq": "4.8.3",
@@ -91,6 +93,21 @@
         },
         "compile": {
           "lib/netstandard2.0/FluentValidation.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.TestHost/2.1.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Hosting": "2.1.0",
+          "System.IO.Pipelines": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.TestHost.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.18136"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.TestHost.dll": {}
         }
       },
       "Microsoft.CodeCoverage/1.0.3": {
@@ -3738,6 +3755,13 @@
       "sha512": "sha512-QmMkxUgd97IpWW+JQTeSeieqQkkUyqJEtJy+XchyYwF3AeKGo4eqU67erM33BifpF1BOcwGGuWyi2r88EZvDqA==",
       "path": "fluentvalidation/7.6.103",
       "hashPath": "fluentvalidation.7.6.103.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.TestHost/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-b/aZdCaAYw6qIVEKPr0LWj/tONHAXaoCY8kATrKdskxR2fPIEOhCEiOe1NQFYRFAY6BmV8Li1WAXu2i85VP3eg==",
+      "path": "microsoft.aspnetcore.testhost/2.1.0",
+      "hashPath": "microsoft.aspnetcore.testhost.2.1.0.nupkg.sha512"
     },
     "Microsoft.CodeCoverage/1.0.3": {
       "type": "package",

@@ -33,7 +33,7 @@ namespace TourApi.Controllers
         public async Task<IActionResult> GetSights(Guid id)
         {
             var result = await _sightRepository.GetSights(id);
-            if(result != null)
+            if(result.Count != 0)
                 return Ok(result);
             return BadRequest();
         }

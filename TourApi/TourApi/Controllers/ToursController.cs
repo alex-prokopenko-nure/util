@@ -56,7 +56,7 @@ namespace TourApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> ChangeTour(Guid id, [FromBody]Tour tour)
         {
-            var result = await _tourRepository.Update(tour);
+            var result = await _tourRepository.Update(id, tour);
             if(result != null)
                 return Ok(result);
             return BadRequest();

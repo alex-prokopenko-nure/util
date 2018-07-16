@@ -1523,6 +1523,19 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.StaticFiles.dll": {}
         }
       },
+      "Microsoft.AspNetCore.TestHost/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Hosting": "2.1.0",
+          "System.IO.Pipelines": "4.5.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.TestHost.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.TestHost.dll": {}
+        }
+      },
       "Microsoft.AspNetCore.WebSockets/2.1.0": {
         "type": "package",
         "dependencies": {
@@ -6147,6 +6160,18 @@
         "lib/netstandard2.0/Microsoft.AspNetCore.StaticFiles.xml",
         "microsoft.aspnetcore.staticfiles.2.1.0.nupkg.sha512",
         "microsoft.aspnetcore.staticfiles.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.TestHost/2.1.0": {
+      "sha512": "b/aZdCaAYw6qIVEKPr0LWj/tONHAXaoCY8kATrKdskxR2fPIEOhCEiOe1NQFYRFAY6BmV8Li1WAXu2i85VP3eg==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.testhost/2.1.0",
+      "files": [
+        ".signature.p7s",
+        "lib/netstandard2.0/Microsoft.AspNetCore.TestHost.dll",
+        "lib/netstandard2.0/Microsoft.AspNetCore.TestHost.xml",
+        "microsoft.aspnetcore.testhost.2.1.0.nupkg.sha512",
+        "microsoft.aspnetcore.testhost.nuspec"
       ]
     },
     "Microsoft.AspNetCore.WebSockets/2.1.0": {
@@ -13056,7 +13081,9 @@
     ".NETCoreApp,Version=v2.1": [
       "AutoMapper >= 7.0.1",
       "FluentValidation >= 7.6.103",
+      "Microsoft.AspNetCore >= 2.1.0",
       "Microsoft.AspNetCore.App >= 2.1.0",
+      "Microsoft.AspNetCore.TestHost >= 2.1.0",
       "Microsoft.NET.Test.Sdk >= 15.7.2",
       "Microsoft.NETCore.App >= 2.1.0",
       "Moq >= 4.8.3",
@@ -13113,11 +13140,17 @@
             "target": "Package",
             "version": "[7.6.103, )"
           },
-          "Microsoft.AspNetCore.App": {
-            "suppressParent": "All",
+          "Microsoft.AspNetCore": {
             "target": "Package",
-            "version": "[2.1.0, )",
-            "autoReferenced": true
+            "version": "[2.1.0, )"
+          },
+          "Microsoft.AspNetCore.App": {
+            "target": "Package",
+            "version": "[2.1.0, )"
+          },
+          "Microsoft.AspNetCore.TestHost": {
+            "target": "Package",
+            "version": "[2.1.0, )"
           },
           "Microsoft.NET.Test.Sdk": {
             "target": "Package",

@@ -42,9 +42,9 @@ namespace TourApi.Repos
             return await _dbContext.Tours.ToListAsync();
         }
 
-        public async Task<Tour> Update(Tour tour)
+        public async Task<Tour> Update(Guid id, Tour tour)
         {
-            Tour updatedTour = await _dbContext.Tours.FirstOrDefaultAsync(x => x.Id == tour.Id);
+            Tour updatedTour = await _dbContext.Tours.FirstOrDefaultAsync(x => x.Id == id);
             if (updatedTour != null)
             {
                 updatedTour.Date = tour.Date;

@@ -11,7 +11,7 @@ namespace TourApi.Repos
         Task<Tour> Get(Guid id);
         Task<List<Tour>> GetAll();
         Task<Tour> Create(Tour tour);
-        Task<Tour> Update(Tour tour);
+        Task<Tour> Update(Guid id, Tour tour);
         Task<Guid> Delete(Guid id);
     }
 }
