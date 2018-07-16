@@ -22,6 +22,7 @@ namespace ApiTester.Tests
 
         public ClientsControllerTests() : base()
         {
+            apiRoute = "clients";
             var stringContent = new StringContent(JsonConvert.SerializeObject(new RegisterDto { Email = "aaaa@ukr.net", FirstName = "Aaaa", LastName = "Aaa", Password = "aaaaaa" }), Encoding.UTF8, "application/json");
             var response = client.PostAsync("accounts/register", stringContent);
             var jsonString = response.Result.Content.ReadAsStringAsync();
@@ -40,11 +41,8 @@ namespace ApiTester.Tests
         [Test]
         public async Task GetClients_ResultAlwaysReturned()
         {
-            var response = await client.GetAsync("clients");
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception("Unknown error occured");
-            }
+            var response = await client.GetAsync(apiRoute);
+            Assert.IsTrue(response.IsSuccessStatusCode);
             var model = JsonConvert.DeserializeObject<List<Client>>(await response.Content.ReadAsStringAsync());
             Assert.That(model[0].Id == testClient1.Id && model[1].Id == testClient2.Id);
         }
@@ -52,11 +50,8 @@ namespace ApiTester.Tests
         [Test]
         public async Task GetClient_ExistingClient_ClientReturned()
         {
-            var response = await client.GetAsync($"clients/{testId}");
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception("Client hasn't been found (maybe you hadn't added it before?)");
-            }
+            var response = await client.GetAsync($"{apiRoute}/{testId}");
+            Assert.IsTrue(response.IsSuccessStatusCode);
             var model = JsonConvert.DeserializeObject<Client>(await response.Content.ReadAsStringAsync());
             Assert.That(model.Id == testClient1.Id);
         }
@@ -64,22 +59,16 @@ namespace ApiTester.Tests
         [Test]
         public async Task GetClient_UnexistingClient_NotFoundReturned()
         {
-            var response = await client.GetAsync($"clients/{unexistingId}");
-            if(response.IsSuccessStatusCode)
-            {
-                throw new Exception("This record shouldn't exist in database");
-            }
+            var response = await client.GetAsync($"{apiRoute}/{unexistingId}");
+            Assert.IsFalse(response.IsSuccessStatusCode);
             Assert.That(response.StatusCode == System.Net.HttpStatusCode.NotFound);
         }
 
         [Test]
         public async Task AddClient_UnexistingClient_ClientReturned()
         {
-            var response = await client.PostAsync("clients", new StringContent(JsonConvert.SerializeObject(testClient2), Encoding.UTF8, "application/json"));
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception("Client adding failed (maybe this client already exists?)");
-            }
+            var response = await client.PostAsync(apiRoute, new StringContent(JsonConvert.SerializeObject(testClient2), Encoding.UTF8, "application/json"));
+            Assert.IsTrue(response.IsSuccessStatusCode);
             var model = JsonConvert.DeserializeObject<Tour>(await response.Content.ReadAsStringAsync());
             Assert.That(model.Id == testClient2.Id);
         }
@@ -87,13 +76,11 @@ namespace ApiTester.Tests
         [Test]
         public async Task AddClient_ExistingClient_BadRequestReturned()
         {
-            await client.PostAsync("clients", new StringContent(JsonConvert.SerializeObject(testClient1), Encoding.UTF8, "application/json"));
-            var response = await client.PostAsync("clients", new StringContent(JsonConvert.SerializeObject(testClient1), Encoding.UTF8, "application/json"));
-            if(response.IsSuccessStatusCode)
-            {
-                throw new Exception("Dubbed adding of one client should've generated BadRequest (maybe clients are different?)");
-            }
-            Assert.That(response.StatusCode == System.Net.HttpStatusCode.BadRequest);
+            var response = await client.PostAsync(apiRoute, new StringContent(JsonConvert.SerializeObject(testClient1), Encoding.UTF8, "application/json"));
+            Assert.IsTrue(response.IsSuccessStatusCode);
+            var dubbedResponse = await client.PostAsync(apiRoute, new StringContent(JsonConvert.SerializeObject(testClient1), Encoding.UTF8, "application/json"));
+            Assert.IsFalse(dubbedResponse.IsSuccessStatusCode);
+            Assert.That(dubbedResponse.StatusCode == System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

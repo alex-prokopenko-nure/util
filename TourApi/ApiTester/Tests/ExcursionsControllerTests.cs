@@ -22,6 +22,7 @@ namespace ApiTester.Tests
 
         public ExcursionsControllerTests() : base()
         {
+            apiRoute = "excursions";
             var stringContent = new StringContent(JsonConvert.SerializeObject(new RegisterDto { Email = "aaaa@ukr.net", FirstName = "Aaaa", LastName = "Aaa", Password = "aaaaaa" }), Encoding.UTF8, "application/json");
             var response = client.PostAsync("accounts/register", stringContent);
             var jsonString = response.Result.Content.ReadAsStringAsync();
@@ -40,11 +41,8 @@ namespace ApiTester.Tests
         [Test]
         public async Task GetExcursions_ResultAlwaysReturned()
         {
-            var response = await client.GetAsync("excursions");
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception("Unknown error occured");
-            }
+            var response = await client.GetAsync(apiRoute);
+            Assert.IsTrue(response.IsSuccessStatusCode);
             var model = JsonConvert.DeserializeObject<List<Excursion>>(await response.Content.ReadAsStringAsync());
             Assert.That(model[0].Id == testExcursion1.Id && model[1].Id == testExcursion2.Id);
         }
@@ -52,11 +50,8 @@ namespace ApiTester.Tests
         [Test]
         public async Task GetExcursion_ExistingExcursion_ExcursionReturned()
         {
-            var response = await client.GetAsync($"excursions/{testId}");
-            if(!response.IsSuccessStatusCode)
-            {
-                throw new Exception("This excursion doesn't exist in DB (maybe you haven't added it before?)");
-            }
+            var response = await client.GetAsync($"{apiRoute}/{testId}");
+            Assert.IsTrue(response.IsSuccessStatusCode);
             var model = JsonConvert.DeserializeObject<Excursion>(await response.Content.ReadAsStringAsync());
             Assert.That(model.Id == testExcursion1.Id);
         }
@@ -64,22 +59,16 @@ namespace ApiTester.Tests
         [Test]
         public async Task GetExcursion_UnexistingExcursion_NotFoundReturned()
         {
-            var response = await client.GetAsync($"excursions/{unexistingId}");
-            if(response.IsSuccessStatusCode)
-            {
-                throw new Exception("This record shouldn't have existed in DB");
-            }
+            var response = await client.GetAsync($"{apiRoute}/{unexistingId}");
+            Assert.IsFalse(response.IsSuccessStatusCode);
             Assert.That(response.StatusCode == System.Net.HttpStatusCode.NotFound);
         }
 
         [Test]
         public async Task AddExcursion_UnexistingExcursion_ExcursionReturned()
         {
-            var response = await client.PostAsync("excursions", new StringContent(JsonConvert.SerializeObject(testExcursion2), Encoding.UTF8, "application/json"));
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception("This record already existed in DB (maybe you've added it before?)");
-            }
+            var response = await client.PostAsync(apiRoute, new StringContent(JsonConvert.SerializeObject(testExcursion2), Encoding.UTF8, "application/json"));
+            Assert.IsTrue(response.IsSuccessStatusCode);
             var model = JsonConvert.DeserializeObject<Tour>(await response.Content.ReadAsStringAsync());
             Assert.That(model.Id == testExcursion2.Id);
         }
@@ -87,12 +76,10 @@ namespace ApiTester.Tests
         [Test]
         public async Task AddExcursion_ExistingExcursion_BadRequestReturned()
         {
-            var response = await client.PostAsync("excursions", new StringContent(JsonConvert.SerializeObject(testExcursion1), Encoding.UTF8, "application/json"));
-            var dubbedResponse = await client.PostAsync("excursions", new StringContent(JsonConvert.SerializeObject(testExcursion1), Encoding.UTF8, "application/json"));
-            if (dubbedResponse.IsSuccessStatusCode)
-            {
-                throw new Exception("Dubbed adding of one excursion should've generated BadRequest (maybe excursions are different?)");
-            }
+            var response = await client.PostAsync(apiRoute, new StringContent(JsonConvert.SerializeObject(testExcursion1), Encoding.UTF8, "application/json"));
+            Assert.IsTrue(response.IsSuccessStatusCode);
+            var dubbedResponse = await client.PostAsync(apiRoute, new StringContent(JsonConvert.SerializeObject(testExcursion1), Encoding.UTF8, "application/json"));
+            Assert.IsFalse(dubbedResponse.IsSuccessStatusCode);
             Assert.That(dubbedResponse.StatusCode == System.Net.HttpStatusCode.BadRequest);
         }
     }

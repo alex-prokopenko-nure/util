@@ -11,6 +11,7 @@ namespace ApiTester.Tests
     {
         protected TestServer server;
         protected HttpClient client;
+        protected string apiRoute;
 
         public ControllerTests()
         {

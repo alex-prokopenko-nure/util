@@ -22,6 +22,7 @@ namespace ApiTester.Tests
 
         public ExcursionSightsControllerTests() : base()
         {
+            apiRoute = "excursionsights";
             var stringContent = new StringContent(JsonConvert.SerializeObject(new RegisterDto { Email = "aaaa@ukr.net", FirstName = "Aaaa", LastName = "Aaa", Password = "aaaaaa" }), Encoding.UTF8, "application/json");
             var response = client.PostAsync("accounts/register", stringContent);
             var jsonString = response.Result.Content.ReadAsStringAsync();
@@ -40,11 +41,8 @@ namespace ApiTester.Tests
         [Test]
         public async Task AddExcursionSight_UnexistingExcursionSight_ExcursionSightReturned()
         {
-            var response = await client.PostAsync("excursionsights", new StringContent(JsonConvert.SerializeObject(testExcursionSight2), Encoding.UTF8, "application/json"));
-            if(!response.IsSuccessStatusCode)
-            {
-                throw new Exception("Adding failed (maybe this record already exists in DB?)");
-            }
+            var response = await client.PostAsync(apiRoute, new StringContent(JsonConvert.SerializeObject(testExcursionSight2), Encoding.UTF8, "application/json"));
+            Assert.IsTrue(response.IsSuccessStatusCode);
             var model = JsonConvert.DeserializeObject<ExcursionSight>(await response.Content.ReadAsStringAsync());
             Assert.That(model.ExcursionId == testExcursionSight2.ExcursionId && model.SightId == testExcursionSight2.SightId);
         }
@@ -52,23 +50,18 @@ namespace ApiTester.Tests
         [Test]
         public async Task AddExcursionSight_ExistingExcursionSight_BadRequestReturned()
         {
-            var response = await client.PostAsync("excursionsights", new StringContent(JsonConvert.SerializeObject(testExcursionSight1), Encoding.UTF8, "application/json"));
-            var dubbedResponse = await client.PostAsync("excursionsights", new StringContent(JsonConvert.SerializeObject(testExcursionSight1), Encoding.UTF8, "application/json"));
-            if(dubbedResponse.IsSuccessStatusCode)
-            {
-                throw new Exception("Dubbed adding of one excursionsight should've generated BadRequest (maybe excursionsights are different?)");
-            }
+            var response = await client.PostAsync(apiRoute, new StringContent(JsonConvert.SerializeObject(testExcursionSight1), Encoding.UTF8, "application/json"));
+            Assert.IsTrue(response.IsSuccessStatusCode);
+            var dubbedResponse = await client.PostAsync(apiRoute, new StringContent(JsonConvert.SerializeObject(testExcursionSight1), Encoding.UTF8, "application/json"));
+            Assert.IsFalse(dubbedResponse.IsSuccessStatusCode);
             Assert.That(dubbedResponse.StatusCode == System.Net.HttpStatusCode.BadRequest);
         }
 
         [Test]
         public async Task DeleteExcursionSight_ExistingExcursionSight_ExcursionSightReturned()
         {
-            var response = await client.DeleteAsync($"excursionsights/{testExcursionSight2.ExcursionId}/{testExcursionSight2.SightId}");
-            if(!response.IsSuccessStatusCode)
-            {
-                throw new Exception("This record doesn't exist in DB (maybe you haven't added it?)");
-            }
+            var response = await client.DeleteAsync($"{apiRoute}/{testExcursionSight2.ExcursionId}/{testExcursionSight2.SightId}");
+            Assert.IsTrue(response.IsSuccessStatusCode);
             var model = JsonConvert.DeserializeObject<Tuple<Guid, Guid>>(await response.Content.ReadAsStringAsync());
             Assert.That(model.Item1 == testExcursionSight2.ExcursionId && model.Item2 == testExcursionSight2.SightId);
         }
@@ -76,11 +69,8 @@ namespace ApiTester.Tests
         [Test]
         public async Task DeleteExcursionSight_UnexistingExcursionSight_NotFoundReturned()
         {
-            var response = await client.DeleteAsync($"excursionsights/{unexistingExcursionId}/{unexistingSightId}");
-            if(response.IsSuccessStatusCode)
-            {
-                throw new Exception("Deleting failed (maybe this record already existed in DB?)");
-            }
+            var response = await client.DeleteAsync($"{apiRoute}/{unexistingExcursionId}/{unexistingSightId}");
+            Assert.IsFalse(response.IsSuccessStatusCode);
             Assert.That(response.StatusCode == System.Net.HttpStatusCode.NotFound);
         }
     }
