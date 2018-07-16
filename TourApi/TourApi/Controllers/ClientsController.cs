@@ -34,7 +34,7 @@ namespace TourApi.Controllers
             Client result = await _clientRepository.Get(id);
             if(result != null)
                 return Ok(result);
-            return BadRequest();
+            return NotFound();
         }
 
         [HttpPost]

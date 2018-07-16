@@ -41,7 +41,7 @@ namespace TourApi.Controllers
             }
             catch(Exception ex)
             {
-                return BadRequest();
+                return NotFound();
             }
             return Ok(result);
         }

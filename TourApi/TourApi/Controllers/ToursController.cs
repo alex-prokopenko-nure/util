@@ -35,7 +35,7 @@ namespace TourApi.Controllers
             var result = await _tourRepository.Get(id);
             if(result != null)
                 return Ok(result);
-            return BadRequest();
+            return NotFound();
         }
 
         [HttpPost]
@@ -59,7 +59,7 @@ namespace TourApi.Controllers
             var result = await _tourRepository.Update(id, tour);
             if(result != null)
                 return Ok(result);
-            return BadRequest();
+            return NotFound();
         }
 
         [HttpDelete("{id}")]
@@ -72,7 +72,7 @@ namespace TourApi.Controllers
             }
             catch(DbUpdateConcurrencyException ex)
             {
-                return BadRequest();
+                return NotFound();
             }
             return Ok(result);
         }

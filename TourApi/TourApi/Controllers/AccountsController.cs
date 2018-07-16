@@ -47,7 +47,7 @@ namespace TourApi.Controllers
                 return Ok(new User { AppUser = appUser, Token = JwtGenerator.GenerateJwtToken(model.Email, appUser, _configuration) });
             }
 
-            return BadRequest();
+            return NotFound();
         }
 
         [HttpPost]

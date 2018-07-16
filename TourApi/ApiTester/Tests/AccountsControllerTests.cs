@@ -16,22 +16,20 @@ using TourApi.ViewModels;
 namespace ApiTester.Tests
 {
     [TestFixture]
-    class AccountsControllerTests
+    class AccountsControllerTests : ControllerTests
     {
-        TestServer server;
-        HttpClient client;
-
-        public AccountsControllerTests()
-        {
-            server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
-            client = server.CreateClient();
-        }
+        public AccountsControllerTests() : base()
+        { }
 
         [Test]
         public async Task Register_UnexistingAccount_TrueReturned()
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(new RegisterDto { Email = "aaaa@ukr.net", FirstName = "Aaaa", LastName = "Aaa", Password = "aaaaaa" }), Encoding.UTF8, "application/json");
             var response = await client.PostAsync("accounts/register", stringContent);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Registration failed (maybe this user already exists?)");
+            }
             var model = JsonConvert.DeserializeObject<bool>(await response.Content.ReadAsStringAsync());
             Assert.That(model == true);
         }
@@ -42,6 +40,10 @@ namespace ApiTester.Tests
             var stringContent = new StringContent(JsonConvert.SerializeObject(new RegisterDto { Email = "aaa@ukr.net", FirstName = "Aaaa", LastName = "Aaa", Password = "aaaaaa" }), Encoding.UTF8, "application/json");
             await client.PostAsync("accounts/register", stringContent);
             var response = await client.PostAsync("accounts/register", stringContent);
+            if(response.IsSuccessStatusCode)
+            {
+                throw new Exception("Registration isn't failed (maybe you are trying to register different users?)");
+            }
             Assert.That(response.StatusCode == System.Net.HttpStatusCode.BadRequest);
         }
 
@@ -49,9 +51,17 @@ namespace ApiTester.Tests
         public async Task Login_ExistingAccount_UserReturned()
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(new RegisterDto { Email = "aa@ukr.net", FirstName = "Aaaa", LastName = "Aaa", Password = "aaaaaa" }), Encoding.UTF8, "application/json");
-            await client.PostAsync("accounts/register", stringContent);
+            var response = await client.PostAsync("accounts/register", stringContent);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Registration failed (maybe this user is already registered?)");
+            }
             var stringContent2 = new StringContent(JsonConvert.SerializeObject(new LoginDto { Email = "aa@ukr.net", Password = "aaaaaa" }), Encoding.UTF8, "application/json");
             var response2 = await client.PostAsync("accounts/login", stringContent2);
+            if (!response2.IsSuccessStatusCode)
+            {
+                throw new Exception("Login failed (maybe you hadn't registered user first?)");
+            }
             var model2 = JsonConvert.DeserializeObject<User>(await response2.Content.ReadAsStringAsync());
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {model2.Token}");
             var response3 = await client.GetAsync("tours");
@@ -59,11 +69,15 @@ namespace ApiTester.Tests
         }
 
         [Test]
-        public async Task Login_UnexistingAccount_BadRequestReturned()
+        public async Task Login_UnexistingAccount_NotFoundReturned()
         {
-            var stringContent2 = new StringContent(JsonConvert.SerializeObject(new LoginDto { Email = "aaaaaaa@ukr.net", Password = "aaaaaa" }), Encoding.UTF8, "application/json");
-            var response2 = await client.PostAsync("accounts/login", stringContent2);
-            Assert.That(response2.StatusCode == System.Net.HttpStatusCode.BadRequest);
+            var stringContent = new StringContent(JsonConvert.SerializeObject(new LoginDto { Email = "aaaaaaa@ukr.net", Password = "aaaaaa" }), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("accounts/login", stringContent);
+            if(response.IsSuccessStatusCode)
+            {
+                throw new Exception("There is registered account that shouldn't exist in DB");
+            }
+            Assert.That(response.StatusCode == System.Net.HttpStatusCode.NotFound);
         }
     }
 }

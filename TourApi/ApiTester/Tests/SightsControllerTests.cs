@@ -13,17 +13,16 @@ using TourApi.ViewModels;
 namespace ApiTester.Tests
 {
     [TestFixture]
-    class SightsControllerTests
+    class SightsControllerTests : ControllerTests
     {
-        TestServer server;
-        HttpClient client;
         private Sight testSight1;
         private Sight testSight2;
+        private Guid testId;
+        private Guid unexistingId;
+        private Guid excursionId;
 
-        public SightsControllerTests()
+        public SightsControllerTests() : base()
         {
-            server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
-            client = server.CreateClient();
             var stringContent = new StringContent(JsonConvert.SerializeObject(new RegisterDto { Email = "aaaa@ukr.net", FirstName = "Aaaa", LastName = "Aaa", Password = "aaaaaa" }), Encoding.UTF8, "application/json");
             var response = client.PostAsync("accounts/register", stringContent);
             var jsonString = response.Result.Content.ReadAsStringAsync();
@@ -33,6 +32,9 @@ namespace ApiTester.Tests
             var jsonString2 = response2.Result.Content.ReadAsStringAsync();
             var model2 = JsonConvert.DeserializeObject<User>(jsonString2.Result);
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {model2.Token}");
+            testId = Guid.Parse("ffe5e70a-8338-4135-85d5-0fbe348cc697");
+            unexistingId = Guid.Parse("ffa5e70a-8338-4135-85d5-0fbe348cc697");
+            excursionId = Guid.Parse("ffe5e70a-8338-4135-85d5-0fbe348cc698");
             testSight1 = new Sight { Id = Guid.Parse("ffe5e70a-8338-4135-85d5-0fbe348cc697"), Name = "Jihn Sniw" };
             testSight2 = new Sight { Id = Guid.Parse("ffe5e70a-8338-4135-85d5-0fbe348cc695"), Name = "Jick Blick" };
         }
@@ -41,6 +43,10 @@ namespace ApiTester.Tests
         public async Task GetSights_ResultAlwaysReturned()
         {
             var response = await client.GetAsync("sights");
+            if(!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Unknown error occured");
+            }
             var model = JsonConvert.DeserializeObject<List<Sight>>(await response.Content.ReadAsStringAsync());
             Assert.That(model[0].Id == testSight1.Id && model[1].Id == testSight2.Id);
         }
@@ -50,22 +56,34 @@ namespace ApiTester.Tests
         {
             await client.PostAsync("excursionsights", new StringContent(JsonConvert.SerializeObject(new ExcursionSight { SightId = testSight1.Id, ExcursionId = Guid.Parse("ffe5e70a-8338-4135-85d5-0fbe348cc698") }), Encoding.UTF8, "application/json"));
             await client.PostAsync("excursionsights", new StringContent(JsonConvert.SerializeObject(new ExcursionSight { SightId = testSight2.Id, ExcursionId = Guid.Parse("ffe5e70a-8338-4135-85d5-0fbe348cc698") }), Encoding.UTF8, "application/json"));
-            var response = await client.GetAsync("sights/ffe5e70a-8338-4135-85d5-0fbe348cc698");
+            var response = await client.GetAsync($"sights/{excursionId}");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("There are no sights with this excursionId");
+            }
             var model = JsonConvert.DeserializeObject<List<Sight>>(await response.Content.ReadAsStringAsync());
             Assert.That(model[0].Id == testSight1.Id);
         }
 
         [Test]
-        public async Task GetSights_UnexistingSight_BadRequestReturned()
+        public async Task GetSights_UnexistingSight_NotFoundReturned()
         {
-            var response = await client.GetAsync("sights/ffa5e70a-8338-4135-85d5-0fbe348cc723");
-            Assert.That(response.StatusCode == System.Net.HttpStatusCode.BadRequest);
+            var response = await client.GetAsync($"sights/{unexistingId}");
+            if(response.IsSuccessStatusCode)
+            {
+                throw new Exception("This record shouldn't have been existed in DB");
+            }
+            Assert.That(response.StatusCode == System.Net.HttpStatusCode.NotFound);
         }
 
         [Test]
         public async Task AddSight_UnexistingSight_SightReturned()
         {
             var response = await client.PostAsync("sights", new StringContent(JsonConvert.SerializeObject(testSight2), Encoding.UTF8, "application/json"));
+            if(!response.IsSuccessStatusCode)
+            {
+                throw new Exception("This record already exists in DB (maybe you've added it earlier?)");
+            }
             var model = JsonConvert.DeserializeObject<Sight>(await response.Content.ReadAsStringAsync());
             Assert.That(model.Id == testSight2.Id);
         }
@@ -75,6 +93,10 @@ namespace ApiTester.Tests
         {
             await client.PostAsync("sights", new StringContent(JsonConvert.SerializeObject(testSight1), Encoding.UTF8, "application/json"));
             var response = await client.PostAsync("sights", new StringContent(JsonConvert.SerializeObject(testSight1), Encoding.UTF8, "application/json"));
+            if (response.IsSuccessStatusCode)
+            {
+                throw new Exception("Dubbed adding of one sight should've generated BadRequest (maybe clients are different?)");
+            }
             Assert.That(response.StatusCode == System.Net.HttpStatusCode.BadRequest);
         }
     }

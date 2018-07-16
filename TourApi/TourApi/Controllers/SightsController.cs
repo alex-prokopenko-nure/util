@@ -35,7 +35,7 @@ namespace TourApi.Controllers
             var result = await _sightRepository.GetSights(id);
             if(result.Count != 0)
                 return Ok(result);
-            return BadRequest();
+            return NotFound();
         }
 
         [HttpPost]

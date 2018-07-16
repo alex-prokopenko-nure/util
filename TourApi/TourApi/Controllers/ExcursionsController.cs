@@ -34,7 +34,7 @@ namespace TourApi.Controllers
             var result = await _excursionRepository.Get(id);
             if(result != null)
                 return Ok(result);
-            return BadRequest();
+            return NotFound();
         }
 
         [HttpPost]
